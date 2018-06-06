@@ -16,9 +16,7 @@
 
       <label >LOG :</label>
       <br>
-      <textarea rows="5" cols="200" readonly [(ngModel)]='logText' class="txtarea">
-
-      </textarea>
+      <textarea rows="5" cols="200" readonly class="txtarea">{{ logText | async }}</textarea>
 
       <br>
 

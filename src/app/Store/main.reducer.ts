@@ -27,8 +27,23 @@ export function mainReducer(state: LogState = initLogState, action: AppActions):
 }
 
 // selectors
-export const addLogsStateFeatureSelector = createFeatureSelector<LogState>('logger');
-export const addLogsStateSelector = createSelector(addLogsStateFeatureSelector, (state) => state);
+export const featureSelector = createFeatureSelector<LogState>('mainReducer');
+export const addLogsStateSelector = createSelector(featureSelector,
+  (state: AppState) => state.mainReducer.ids,
+  (state: AppState) => state.mainReducer.entities,
+  (state: LogState, ids: number[], entities: Dictionary<LogEntity>) => {
+    console.log('--------------- ', state, ids, entities);
+    if (!ids || !entities) {
+      return null;
+    }
+    const logsArray = ids.reduce((res, id) => {
+      res.push(entities[id].content);
+      return res;
+    }, []);
+    // console.log('--------------- ', logsArray);
+    return logsArray;
+  }
+);
 
 export const addLogsStateSelector2 = createSelector((state: AppState) => state.mainReducer.entities, (state) => state);
 
@@ -36,7 +51,7 @@ export const addLogsStateSelector3 = createSelector(
   (state: AppState) => state.mainReducer.ids,
   (state: AppState) => state.mainReducer.entities,
   (ids: number[], entities: Dictionary<LogEntity>) => {
-    const logsArray = ids.reduce((res, id ) => {
+    const logsArray = ids.reduce((res, id) => {
       res.push(entities[id].content);
       return res;
     }, []);
@@ -50,4 +65,4 @@ export const addLogsStateSelector3 = createSelector(
 // export const getPortfoliosState = (state: LogState) => state.ids;
 // export const getPortfolioIds = createSelector(getPortfoliosState, (state: State) => state );
 
-export const {selectAll} = logAdapter.getSelectors(addLogsStateSelector);
+// export const {selectAll} = logAdapter.getSelectors(addLogsStateSelector);
