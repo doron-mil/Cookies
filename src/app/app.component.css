@@ -1,0 +1,44 @@
+
+.txtarea {
+  width: 100%;
+  overflow-y: scroll;
+}
+
+.mojFooter {
+  background-color: #f8f8f8;
+  color: #00a651;
+  padding-top: 0px;
+  border-top: 1px solid #e7e7e7;
+  margin-bottom: 0px;
+}
+
+.bottom-footer {
+  border-top: 1px solid #00a651;
+  margin-top: 0px;
+  padding-top: 7px;
+  color: #00a651;
+
+}
+
+.footer-nav li {
+  display: inline;
+  padding: 0px 140px;
+}
+
+.footer-nav a {
+  color: grey;
+  text-decoration: none;
+}
+
+body {
+  min-height: 100vh;
+  position: relative;
+  margin: 0;
+}
+
+footer {
+  width: 100%;
+  height: 300px;
+  position: absolute;
+  bottom: 0;
+}

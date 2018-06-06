@@ -1,0 +1,26 @@
+<div class="container">
+
+  <div class="row justify-content-md-center">
+    <div class="col col-lg-4">
+      Name
+    </div>
+    <div class="col col-lg-5">
+      Location
+    </div>
+    <div class="col col-lg-3">
+      Supply
+    </div>
+  </div>
+  <div class="row" *ngFor="let outpost of outpostList">
+    <div class="col col-4 ">
+      {{outpost.name}}
+    </div>
+    <div class="col col-5">
+      {{outpost.location}}
+    </div>
+    <div class="col col-3 ">
+      {{outpost.supplyMeter}}
+    </div>
+
+  </div>
+</div>

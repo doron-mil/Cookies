@@ -1,31 +1,32 @@
 import {Action} from '@ngrx/store';
+import {LogEntity} from '../model/logEntity';
 
 // define action types
 export enum AppActionTypes {
-  ToggleLoader = '[App] Toggle Loader',
-  ToggleHeader = '[App] Toggle Header'
+  AddLog = '[App] Add Log',
+  AddLogSuccess = '[App] Add Log Success'
 }
 
 // define action constructors
-export class ToggleLoader implements Action {
+export class AddLog implements Action {
   public type: string;
-  public payload: boolean;
+  public payload: LogEntity;
 
-  constructor(payload: boolean) {
-    this.type    = AppActionTypes.ToggleLoader;
+  constructor(payload: LogEntity) {
+    this.type    = AppActionTypes.AddLog;
     this.payload = payload;
   }
 }
 
-export class ToggleHeader implements Action {
-  public payload: boolean;
+export class AddLogSuccess implements Action {
   public type: string;
+  public payload: any;
 
-  constructor(payload: boolean) {
-    this.payload = payload;
-    this.type    = AppActionTypes.ToggleHeader;
+  constructor() {
+    this.type    = AppActionTypes.AddLogSuccess;
   }
 }
+
 
 // define App Actions type
-export type AppActions = ToggleHeader | ToggleLoader;
+export type AppActions = AddLog| AddLogSuccess ;

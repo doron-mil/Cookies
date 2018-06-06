@@ -1,38 +1,23 @@
-import {createEntityAdapter, EntityState} from '@ngrx/entity';
-import {createFeatureSelector} from '@ngrx/store';
-import {DevelopersActions, DevelopersActionTypes} from '../actions/developers.actions';
-import {Developer} from '../models/developer';
+import {createFeatureSelector, createSelector} from '@ngrx/store';
+import {AppActions, AppActionTypes} from './app.actions';
+import {initLogState, logAdapter, LogState} from './main.state';
+import {AppState} from '../app.module';
 
-// create an adaptor for the developer
-const developerAdaptor = createEntityAdapter<Developer>();
 
-// extend the application state to includes our entity
-export interface State extends EntityState<Developer> {}
-
-// create an default developer
-const developers = {
-  ids     : [],
-  entities: {}
-};
-
-// extract the initial state from the adaptor
-export const initState: State = developerAdaptor.getInitialState(developers);
-
-export function developerReducer(state: State = initState, action: DevelopersActions) {
-
+export function mainReducer(state: LogState = initLogState, action: AppActions): LogState {
+  // console.log('00000000');
   switch (action.type) {
 
-    case DevelopersActionTypes.AddDeveloper:
-      return developerAdaptor.addOne(action.developer, state);
+    case AppActionTypes.AddLog:
 
-    case DevelopersActionTypes.UpdateDeveloper:
-      return developerAdaptor.updateOne({
-        id     : action.id,
-        changes: action.changes
-      }, state);
+      const logState = logAdapter.addOne(action.payload, state);
+      // console.log('11111111111111', logState);
+      return logState;
 
-    case DevelopersActionTypes.DeleteDeveloper:
-      return developerAdaptor.removeOne(action.id, state);
+    case AppActionTypes.AddLogSuccess:
+
+      // console.log('2222222222222');
+      return state;
 
     default:
       return state;
@@ -40,6 +25,20 @@ export function developerReducer(state: State = initState, action: DevelopersAct
 }
 
 // selectors
-export const getDevelopersState = createFeatureSelector<State>('developer');
+export const addLogsStateFeatureSelector = createFeatureSelector<LogState>('logger');
+export const addLogsStateSelector = createSelector(addLogsStateFeatureSelector, (state) => state);
 
-export const { selectAll } = developerAdaptor.getSelectors(getDevelopersState);
+export const addLogsStateSelector2 = createSelector((state: AppState) => state.mainReducer.entities , (state) => state);
+
+// export const addLogsStateSelector3 = createSelector(
+//   (state: AppState) => state.mainReducer.ids ,
+//   (state: AppState) => state.mainReducer.entities ,
+//   (ids:number[],entities:AppState[]) => 'aaaa' );
+
+    // ids.reduce(
+    //   (res, id) => res =  entities[id].content + '\n' + res , ''));
+
+// export const getPortfoliosState = (state: LogState) => state.ids;
+// export const getPortfolioIds = createSelector(getPortfoliosState, (state: State) => state );
+
+export const {selectAll} = logAdapter.getSelectors(addLogsStateSelector);

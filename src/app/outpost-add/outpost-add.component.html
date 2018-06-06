@@ -1,0 +1,24 @@
+<label class="mr-2 ml-2">Name:</label>
+<input type="text" [(ngModel)]="outpost.name" />
+<BR/>
+
+<label class="mr-2 ml-2">Location:</label>
+<input type="text" [(ngModel)]="outpost.location"/>
+<BR/>
+
+<label class="mr-2 ml-2">Supply amount:</label>
+<input type="number" [(ngModel)]="outpost.supplyMeter" />
+<BR/>
+
+<BR/>
+<BR/>
+
+<div class="btn-group">
+
+  <button type="button" class="btn btn-primary" (click)="commitAndAddAnother()">Commit and Add one more</button>
+  <button type="button" class="btn btn-info mr-auto ml-2 mt-lg-0" (click)="commitAndExit()">Commit and return to list
+  </button>
+  <button type="button" class="btn btn-group ml-2" routerLink="/outpost-list">Cancel</button>
+</div>
+
+
