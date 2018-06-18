@@ -32,12 +32,12 @@ export const addLogsStateSelector = createSelector(featureSelector,
   (state: AppState) => state.mainReducer.ids,
   (state: AppState) => state.mainReducer.entities,
   (state: LogState, ids: number[], entities: Dictionary<LogEntity>) => {
-    console.log('--------------- ', state, ids, entities);
+    // console.log('--------------- ', state, ids, entities);
     if (!ids || !entities) {
       return null;
     }
     const logsArray = ids.reduce((res, id) => {
-      res.push(entities[id].content);
+      res.push({ content : entities[id].content , title : entities[id].calculated });
       return res;
     }, []);
     // console.log('--------------- ', logsArray);

@@ -13,12 +13,15 @@ import {mainReducer} from './Store/main.reducer';
 import {MainEffects} from './Store/main.effects';
 import {LogState} from './Store/main.state';
 import {AppActions} from './Store/app.actions';
+import {ServiceWorkerModule} from '@angular/service-worker';
+import {environment} from '../environments/environment';
+import {HttpClientModule} from '@angular/common/http';
 
-export interface AppState  {
+export interface AppState {
   mainReducer: LogState;
 }
 
-export const reducers: ActionReducerMap<AppState , AppActions> = {
+export const reducers: ActionReducerMap<AppState, AppActions> = {
   mainReducer: mainReducer,
 };
 
@@ -33,9 +36,11 @@ export const reducers: ActionReducerMap<AppState , AppActions> = {
     BsDropdownModule.forRoot(),
     BrowserModule,
     FormsModule,
+    HttpClientModule,
     AppRoutingModule,
     StoreModule.forRoot(reducers),
     EffectsModule.forRoot([MainEffects]),
+    ServiceWorkerModule.register('/ngsw-worker.js', {enabled: environment.production}),
 
   ],
   exports: [AlertModule, BsDropdownModule, AppRoutingModule],

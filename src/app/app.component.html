@@ -1,7 +1,23 @@
 <nav class="navbar navbar-light " style="background-color: #e3f2fd;">
   <button type="button" class="btn btn-primary" routerLink="/outpost-list">Outpost List</button>
   <button type="button" class="btn btn-info mr-auto ml-4 mt-lg-0" routerLink="/outpost-add">Add Outpost</button>
-  <button type="button" class="btn btn-secondary ml-4 mr-auto" (click)="reset()">Most Active Outpost</button>
+
+  <div class="btn-group ml-4 mr-auto" dropdown>
+    <button id="button-basic" dropdownToggle type="button" class="btn btn-warning dropdown-toggle ml-4 mr-auto"
+            aria-controls="dropdown-basic" >
+      Actions <span class="caret"></span>
+    </button>
+    <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
+        role="menu" aria-labelledby="button-basic">
+      <li role="menuitem"><a class="dropdown-item" (click)="setCache()">Add cache</a></li>
+      <li role="menuitem"><a class="dropdown-item" (click)="resetCache()">Delete cache</a></li>
+      <li class="divider dropdown-divider"></li>
+      <li role="menuitem"><a class="dropdown-item" (click)="cache2Db()">Cache 2 DB</a></li>
+      <li role="menuitem"><a class="dropdown-item" (click)="Db2cache()">DB 2 Cache</a></li>
+      <li role="menuitem"><a class="dropdown-item" (click)="resetDB()">Delete DB</a></li>
+    </ul>
+  </div>
+
   <!--(click)="reset()"-->
 </nav>
 
