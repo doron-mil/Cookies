@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Outpost} from '../model/outpost';
-import {OutpostsService} from '../outposts.service';
+import {OutpostsService} from '../services/outposts.service';
 
 @Component({
   selector: 'app-outpost-list',
@@ -9,13 +9,18 @@ import {OutpostsService} from '../outposts.service';
 })
 export class OutpostListComponent implements OnInit {
 
-  outpostList: Outpost[] ;
+  outpostList: Outpost[];
 
   constructor(private outpostsService: OutpostsService) {
+    OutpostsService.changeSubject.subscribe((val) => this.refreshData());
   }
 
   ngOnInit() {
-    this.outpostList = this.outpostsService.getOutpostsList();
+    this.refreshData();
+
   }
 
+  private refreshData() {
+    this.outpostList = this.outpostsService.getOutpostsList();
+  }
 }

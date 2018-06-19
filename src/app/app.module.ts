@@ -16,6 +16,7 @@ import {AppActions} from './Store/app.actions';
 import {ServiceWorkerModule} from '@angular/service-worker';
 import {environment} from '../environments/environment';
 import {HttpClientModule} from '@angular/common/http';
+import {MatButtonModule, MatCheckboxModule} from '@angular/material';
 
 export interface AppState {
   mainReducer: LogState;
@@ -41,6 +42,8 @@ export const reducers: ActionReducerMap<AppState, AppActions> = {
     StoreModule.forRoot(reducers),
     EffectsModule.forRoot([MainEffects]),
     ServiceWorkerModule.register('/ngsw-worker.js', {enabled: environment.production}),
+    MatButtonModule,
+    MatCheckboxModule,
 
   ],
   exports: [AlertModule, BsDropdownModule, AppRoutingModule],

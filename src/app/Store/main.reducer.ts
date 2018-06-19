@@ -16,6 +16,13 @@ export function mainReducer(state: LogState = initLogState, action: AppActions):
       // console.log('11111111111111', logState);
       return logState;
 
+    case AppActionTypes.AddMultiLogs:
+
+      // console.log('11111111111111', state, action.payload);
+      const logManyState = logAdapter.upsertMany(action.payload, state);
+      // console.log('2222222222222222222', logManyState);
+      return logManyState;
+
     case AppActionTypes.AddLogSuccess:
 
       // console.log('2222222222222');
@@ -37,7 +44,7 @@ export const addLogsStateSelector = createSelector(featureSelector,
       return null;
     }
     const logsArray = ids.reduce((res, id) => {
-      res.push({ content : entities[id].content , title : entities[id].calculated });
+      res.push({content: entities[id].content, title: entities[id].calculated});
       return res;
     }, []);
     // console.log('--------------- ', logsArray);

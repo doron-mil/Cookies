@@ -9,6 +9,7 @@ import {AppState} from './app.module';
 import {forEach} from '@angular/router/src/utils/collection';
 import {Observable} from 'rxjs';
 import idb from 'idb';
+import {DataPersistenceSvc} from './services/data.persistence.svc';
 
 
 @Component({
@@ -20,7 +21,9 @@ export class AppComponent {
   title = 'app';
   logText: Observable<string>;
 
-  constructor(private store: Store<AppState>) {
+  constructor(
+    private store: Store<AppState>,
+    private dataPersistenceSvc: DataPersistenceSvc) {
     //  this.logText = 'start';
 
     // this.store.select(mapToDataToSources).pipe(
@@ -61,6 +64,14 @@ export class AppComponent {
     //   .subscribe((aaa) => console.log('bbbbbb', aaa));
   }
 
+  data2Db() {
+    this.dataPersistenceSvc.data2Db();
+  }
+
+  Db2data() {
+    this.dataPersistenceSvc.Db2data().then( () => console.log('eeeee'));
+
+  }
 
   // Working !!!!
   // constructor(private actionsSubj: ActionsSubject) {
@@ -75,6 +86,7 @@ export class AppComponent {
 
   resetDB() {
     window.indexedDB.deleteDatabase('test-db1');
+    this.dataPersistenceSvc.deleteDatabase();
   }
 
   openDb() {
@@ -94,7 +106,6 @@ export class AppComponent {
       }
     });
   }
-
 
   Db2cache() {
     const dbPromise = this.openDb();
@@ -154,16 +165,9 @@ export class AppComponent {
     });
 
     dbPromise.then(function (db) {
-      const chachesArray = [
-        {store: 'api-test-cache', cachesName: 'ngsw:1:data:dynamic:api-test-performance:cache'},
-        {store: 'api-test-lru', cachesName: 'ngsw:db:ngsw:1:data:dynamic:api-test-performance:lru'},
-        {store: 'api-test-age', cachesName: 'ngsw:db:ngsw:1:data:dynamic:api-test-performance:age'},
-      ];
-
       // chachesArray.forEach( (cahchesMeta) => this.writeToDb(cahchesMeta));
       // Updating the Database
       const cacheName = 'ngsw:1:data:dynamic:api-test-performance:cache';
-
       caches.open(cacheName).then(function (cache) {
         cache.keys().then(function (keys) {
           keys.forEach(function (request, index, array) {

@@ -9,6 +9,9 @@
     </button>
     <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
         role="menu" aria-labelledby="button-basic">
+      <li role="menuitem"><a class="dropdown-item" (click)="data2Db()">Save data 2 DB</a></li>
+      <li role="menuitem"><a class="dropdown-item" (click)="Db2data()">Get data from DB</a></li>
+      <li class="divider dropdown-divider"></li>
       <li role="menuitem"><a class="dropdown-item" (click)="setCache()">Add cache</a></li>
       <li role="menuitem"><a class="dropdown-item" (click)="resetCache()">Delete cache</a></li>
       <li class="divider dropdown-divider"></li>

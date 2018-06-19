@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Outpost} from '../model/outpost';
-import {OutpostsService} from '../outposts.service';
+import {OutpostsService} from '../services/outposts.service';
 import {Router} from '@angular/router';
 
 @Component({

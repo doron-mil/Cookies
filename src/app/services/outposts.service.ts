@@ -1,15 +1,17 @@
 import {Injectable} from '@angular/core';
-import {Outpost} from './model/outpost';
-import {LogState} from './Store/main.state';
+import {Outpost} from '../model/outpost';
+import {LogState} from '../Store/main.state';
 import {Store} from '@ngrx/store';
-import {AddLog} from './Store/app.actions';
+import {AddLog} from '../Store/app.actions';
 import {HttpClient} from '@angular/common/http';
+import {Subject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OutpostsService {
 
+  public static changeSubject: Subject<boolean> = new Subject();
   static nextLogId: number = 1;
 
   outpostList: Outpost[] = new Array<Outpost>();
@@ -27,7 +29,7 @@ export class OutpostsService {
     fetch(url)
       .then(response => response.json())
       .then(json => {
-        console.log('fetch => json :', json);
+        // console.log('fetch => json :', json);
         let titleText = json.title;
         if (titleText) {
           titleText = titleText.slice(0, 30);
@@ -92,5 +94,10 @@ export class OutpostsService {
 
   getOutpostsList(): Outpost[] {
     return this.outpostList;
+  }
+
+  setOutpostsList(aOutpostsList: Outpost[]) {
+    this.outpostList = aOutpostsList;
+    OutpostsService.changeSubject.next(true);
   }
 }
