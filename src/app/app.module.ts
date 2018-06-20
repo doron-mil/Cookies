@@ -14,7 +14,7 @@ import {ServiceWorkerModule} from '@angular/service-worker';
 import {environment} from '../environments/environment';
 import {HttpClientModule} from '@angular/common/http';
 import {MatButtonModule, MatCheckboxModule} from '@angular/material';
-import {NgRedux, NgReduxModule} from '@angular-redux/store';
+import {DevToolsExtension, NgRedux, NgReduxModule} from '@angular-redux/store';
 import {mainReducer} from './Store/main.reducer';
 import {createLogger} from 'redux-logger' ;
 import {applyMiddleware, createStore, Store} from 'redux';
@@ -23,10 +23,7 @@ import storage from 'redux-persist/lib/storage';
 import hardSet from 'redux-persist/es/stateReconciler/hardSet';
 import {LocalForageStorage} from 'redux-persist/es/types';
 import * as localForage from 'localforage';
-
-const logger = createLogger({
-  collapsed: true,
-});
+import {composeWithDevTools} from 'redux-devtools-extension';
 
 // localForage.setItem('key1', 'value1', function (err) {
 //   // if err is non-null, we got an error
@@ -34,18 +31,6 @@ const logger = createLogger({
 //     // if err is non-null, we got an error. otherwise, value is the value
 //   });
 // });
-
-const persistConfig = {
-  key: 'root',
-  storage: localForage,
-  stateReconciler: hardSet,
-};
-const persistedReducer = persistReducer(persistConfig, mainReducer);
-
-export const store: Store<LogState> = createStore(
-  persistedReducer,
-  applyMiddleware(logger)
-);
 
 
 @NgModule({
@@ -71,7 +56,28 @@ export const store: Store<LogState> = createStore(
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor(ngRedux: NgRedux<LogState>) {
+  constructor(
+    ngRedux: NgRedux<LogState>,
+    private devTools: DevToolsExtension) {
+
+    const logger = createLogger({
+      collapsed: true,
+    });
+
+    const persistConfig = {
+      key: 'root',
+      storage: localForage,
+      stateReconciler: hardSet,
+    };
+    const persistedReducer = persistReducer(persistConfig, mainReducer);
+
+    const store: Store<LogState> = createStore(
+      persistedReducer,
+      composeWithDevTools(
+        applyMiddleware(logger),
+      )
+    );
+
     ngRedux.provideStore(store);
     persistStore(store);
   }
