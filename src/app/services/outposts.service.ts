@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {Outpost} from '../model/outpost';
 import {LogState} from '../Store/main.state';
-import {Store} from '@ngrx/store';
-import {AddLog} from '../Store/app.actions';
+import {AddLog, AppActionTypes} from '../Store/app.actions';
 import {HttpClient} from '@angular/common/http';
 import {Subject} from 'rxjs';
+import {NgRedux} from '@angular-redux/store';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class OutpostsService {
 
   outpostList: Outpost[] = new Array<Outpost>();
 
-  constructor(private http: HttpClient, private store: Store<LogState>) {
+  constructor(private http: HttpClient, private store: NgRedux<LogState>) {
   }
 
   addOutpost(outpost: Outpost) {
@@ -39,57 +39,16 @@ export class OutpostsService {
       .catch(err => 'NO CONNECTION')
       .then(title => {
         this.store.dispatch(
-          new AddLog(
-            {
+          {
+            type: AppActionTypes.AddLog,
+            payload: {
               id: newID,
               content: logMsg,
               calculated: title,
-            }));
+            }
+          });
       });
 
-    // ************* Working
-    // this.http.get<{ title }>(url)
-    //   .subscribe(response => {
-    //     let titleText = response.title;
-    //     if (titleText) {
-    //       titleText = titleText.slice(0, 30);
-    //     }
-    //     this.store.dispatch(
-    //       new AddLog(
-    //         {
-    //           id: newID,
-    //           content: logMsg,
-    //           calculated: titleText,
-    //         }))
-    //     ;
-    //
-    //     // console.log('aaaaaaa' , response);
-    //   });
-
-    // this.store.dispatch(
-    //   new AddLog(
-    //     {
-    //       id: newID,
-    //       content: logMsg,
-    //       calculated: url.slice(0, 30)
-    //     }));
-
-
-    // fetch('https://jsonplaceholder.typicode.com/posts/' + newID)
-    //   .then(response => response.json())
-    //   .then(json => {
-    //     let titleText = json.title;
-    //     if (titleText) {
-    //       titleText = titleText.slice(0, 30);
-    //     }
-    //     this.store.dispatch(
-    //       new AddLog(
-    //         {
-    //           id: newID,
-    //           content: logMsg,
-    //           calculated: titleText,
-    //         }));
-    //   });
   }
 
   getOutpostsList(): Outpost[] {

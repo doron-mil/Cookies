@@ -2,12 +2,11 @@ import {Injectable} from '@angular/core';
 import idb, {DB} from 'idb';
 import {OutpostsService} from './outposts.service';
 import {Outpost} from '../model/outpost';
-import {Store} from '@ngrx/store';
-import {AppState} from '../app.module';
 import {take} from 'rxjs/operators';
 import {LogEntity} from '../model/logEntity';
-import {Dictionary} from '@ngrx/entity/src/models';
 import {AddLog, AddMultiLogs} from '../Store/app.actions';
+import {LogState} from '../Store/main.state';
+import {NgRedux} from '@angular-redux/store';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +18,7 @@ export class DataPersistenceSvc {
   logStoreName: string = 'log-table';
 
   constructor(
-    private store: Store<AppState>, private outpostsService: OutpostsService) {
+    private store: NgRedux<LogState>, private outpostsService: OutpostsService) {
   }
 
   openDb(): Promise<DB> {
@@ -46,7 +45,7 @@ export class DataPersistenceSvc {
   // }
 
   data2Db() {
-    const statePromise = this.store.select((state: AppState) => state.mainReducer.entities)
+    const statePromise = this.store.select((state: LogState) => state)
       .pipe(take(1)).toPromise();
 
     const dbPromise = this.openDb();

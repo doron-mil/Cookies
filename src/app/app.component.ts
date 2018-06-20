@@ -1,15 +1,14 @@
 import {Component} from '@angular/core';
-import {LogState} from './Store/main.state';
-import {ActionsSubject, select, Store} from '@ngrx/store';
-import {addLogsStateSelector, addLogsStateSelector2, addLogsStateSelector3} from './Store/main.reducer';
+import {INITIAL_STATE, LogState} from './Store/main.state';
+import {mainReducer} from './Store/main.reducer';
 import {filter, map, reduce, tap} from 'rxjs/operators';
-import {Actions, ofType} from '@ngrx/effects';
 import {AddLogSuccess, AppActions, AppActionTypes} from './Store/app.actions';
-import {AppState} from './app.module';
 import {forEach} from '@angular/router/src/utils/collection';
 import {Observable} from 'rxjs';
 import idb from 'idb';
 import {DataPersistenceSvc} from './services/data.persistence.svc';
+import {NgRedux} from '@angular-redux/store';
+import {LogEntity} from './model/logEntity';
 
 
 @Component({
@@ -21,47 +20,17 @@ export class AppComponent {
   title = 'app';
   logText: Observable<string>;
 
+
   constructor(
-    private store: Store<AppState>,
+    private ngRedux: NgRedux<LogState>,
     private dataPersistenceSvc: DataPersistenceSvc) {
-    //  this.logText = 'start';
 
-    // this.store.select(mapToDataToSources).pipe(
-    //   // map(state => {
-    //   //   console.log('cccccccc', state.mainReducer.entities);
-    //   //   return state.mainReducer.entities;
-    //   // }),
-    //   map(state => {
-    //     const ent = (state.mainReducer.ids as number[]).reduce(
-    //       (res, id) => res = state.mainReducer.entities[id].content + '\n' + res, '');
-    //     // console.log('cccccccc', state.mainReducer.entities, ent);
-    //     return ent;
-    //   }),
-    // ).subscribe((aaa) => this.logText = aaa);
-
-    // this.store.select(addLogsStateSelector3).pipe(
-    //   map(logsArray => {
-    //     const formattedLogs = logsArray.reduce(
-    //             (res, log) => res = log + '\n' + res , '');
-    //     console.log('cccccccc', formattedLogs);
-    //     return formattedLogs;
-    //   }),
-    // ).subscribe((formattedLogs) => this.logText = formattedLogs);
-
-    this.logText = this.store.select(addLogsStateSelector).pipe(
-      map(logsArray => {
-        if (!logsArray) {
-          return '';
-        }
-        const formattedLogs = logsArray.reduce(
-          (res, log) => res = log.content + ' +++ ' + log.title + '\n' + res, '');
-        // console.log('cccccccc', formattedLogs);
-        return formattedLogs;
-      }),
-    );
-
-    // this.store.select(AppActionTypes.AddLogSuccess).pipe( tap((aaa) => console.log('bbbbbb', aaa)))
-    //   .subscribe((aaa) => console.log('bbbbbb', aaa));
+    this.logText = ngRedux.select<LogState>().pipe(
+      map((logState: LogState) => {
+        const result = logState.logsArray.reduce( (res, log) => res = log.content + ' +++ ' + log.calculated + '\n' + res, '');
+        // console.log('aaaaaaaaaaaaa', type(logEntitiesArray),logEntitiesArray);
+        return result;
+      }));
   }
 
   data2Db() {
@@ -69,20 +38,9 @@ export class AppComponent {
   }
 
   Db2data() {
-    this.dataPersistenceSvc.Db2data().then( () => console.log('eeeee'));
+    this.dataPersistenceSvc.Db2data().then(() => console.log('eeeee'));
 
   }
-
-  // Working !!!!
-  // constructor(private actionsSubj: ActionsSubject) {
-  //   this.logText = 'start';
-  //
-  //   this.logText = actionsSubj.subscribe(data => {
-  //     if(data.type === AppActionTypes.AddLog) {
-  //       console.log('bbbbbb' , data );
-  //     }
-  //   });
-  // }
 
   resetDB() {
     window.indexedDB.deleteDatabase('test-db1');
@@ -351,10 +309,6 @@ export class AppComponent {
 
 }
 
-export function mapToDataToSources(state: AppState): AppState {
-  // console.log(state);
-  return state;
-}
 
 function writeToCache(db, cahchesMeta: { store: string; cachesName: string }) {
 

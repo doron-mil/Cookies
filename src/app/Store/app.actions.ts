@@ -1,5 +1,9 @@
-import {Action} from '@ngrx/store';
 import {LogEntity} from '../model/logEntity';
+
+export interface Action {
+  type: string;
+  payload: any;
+}
 
 // define action types
 export enum AppActionTypes {

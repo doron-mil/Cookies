@@ -1,14 +1,9 @@
-import {EntityState, EntityAdapter, createEntityAdapter} from '@ngrx/entity';
 import {LogEntity} from '../model/logEntity';
 
-export const logAdapter: EntityAdapter<LogEntity> = createEntityAdapter<LogEntity>();
+export interface LogState {
+  logsArray: Array<LogEntity>;
+}
 
-const logs = {
-  ids     : [],
-  entities: {}
+export const INITIAL_STATE: LogState = {
+  logsArray: [],
 };
-
-export interface LogState extends EntityState<LogEntity> {}
-
-export const initLogState: LogState = logAdapter.getInitialState(logs);
-
