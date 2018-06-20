@@ -17,10 +17,36 @@ import {MatButtonModule, MatCheckboxModule} from '@angular/material';
 import {NgRedux, NgReduxModule} from '@angular-redux/store';
 import {mainReducer} from './Store/main.reducer';
 import {createLogger} from 'redux-logger' ;
+import {applyMiddleware, createStore, Store} from 'redux';
+import {persistStore, persistReducer} from 'redux-persist' ;
+import storage from 'redux-persist/lib/storage';
+import hardSet from 'redux-persist/es/stateReconciler/hardSet';
+import {LocalForageStorage} from 'redux-persist/es/types';
+import * as localForage from 'localforage';
 
 const logger = createLogger({
   collapsed: true,
 });
+
+// localForage.setItem('key1', 'value1', function (err) {
+//   // if err is non-null, we got an error
+//   localForage.getItem('key', function (err1, value) {
+//     // if err is non-null, we got an error. otherwise, value is the value
+//   });
+// });
+
+const persistConfig = {
+  key: 'root',
+  storage: localForage,
+  stateReconciler: hardSet,
+};
+const persistedReducer = persistReducer(persistConfig, mainReducer);
+
+export const store: Store<LogState> = createStore(
+  persistedReducer,
+  applyMiddleware(logger)
+);
+
 
 @NgModule({
   declarations: [
@@ -46,7 +72,8 @@ const logger = createLogger({
 })
 export class AppModule {
   constructor(ngRedux: NgRedux<LogState>) {
-    ngRedux.configureStore(mainReducer, INITIAL_STATE, [logger]);
+    ngRedux.provideStore(store);
+    persistStore(store);
   }
 }
 
