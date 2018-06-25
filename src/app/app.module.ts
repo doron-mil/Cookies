@@ -9,7 +9,6 @@ import {OutpostListComponent} from './outpost-list/outpost-list.component';
 import {AppRoutingModule} from './/app-routing.module';
 import {MainEffects} from './Store/main.effects';
 import {INITIAL_STATE, LogState} from './Store/main.state';
-import {AppActions} from './Store/app.actions';
 import {ServiceWorkerModule} from '@angular/service-worker';
 import {environment} from '../environments/environment';
 import {HttpClientModule} from '@angular/common/http';
@@ -24,6 +23,8 @@ import hardSet from 'redux-persist/es/stateReconciler/hardSet';
 import {LocalForageStorage} from 'redux-persist/es/types';
 import * as localForage from 'localforage';
 import {composeWithDevTools} from 'redux-devtools-extension';
+import {outpostMiddleware} from './Store/middleware/feature/outpostLogger';
+import {apiMiddleware} from './Store/middleware/core/api';
 
 // localForage.setItem('key1', 'value1', function (err) {
 //   // if err is non-null, we got an error
@@ -71,10 +72,19 @@ export class AppModule {
     };
     const persistedReducer = persistReducer(persistConfig, mainReducer);
 
+    const featureMiddleware = [
+      outpostMiddleware
+    ];
+
+    const coreMiddleware = [
+      apiMiddleware,
+      logger
+    ];
+
     const store: Store<LogState> = createStore(
       persistedReducer,
       composeWithDevTools(
-        applyMiddleware(logger),
+        applyMiddleware(...featureMiddleware, ...coreMiddleware),
       )
     );
 

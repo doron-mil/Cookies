@@ -1,6 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {Outpost} from '../model/outpost';
-import {OutpostsService} from '../services/outposts.service';
+import {LogState} from '../Store/main.state';
+import {NgRedux} from '@angular-redux/store';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-outpost-list',
@@ -9,10 +12,14 @@ import {OutpostsService} from '../services/outposts.service';
 })
 export class OutpostListComponent implements OnInit {
 
-  outpostList: Outpost[];
+  outpostList: Observable<Outpost[]>;
 
-  constructor(private outpostsService: OutpostsService) {
-    OutpostsService.changeSubject.subscribe((val) => this.refreshData());
+  constructor(private ngRedux: NgRedux<LogState>) {
+    this.outpostList = ngRedux.select<Outpost[]>('outpostList');
+    // .subscribe( (aaaa) => console.log('2222222222222222', aaaa) );
+
+    // ngRedux.select<Outpost[]>('outpostList')
+    //   .subscribe((aaaa) => console.log('2222222222222222', type(aaaa), aaaa));
   }
 
   ngOnInit() {
@@ -21,6 +28,9 @@ export class OutpostListComponent implements OnInit {
   }
 
   private refreshData() {
-    this.outpostList = this.outpostsService.getOutpostsList();
   }
 }
+
+const type = (obj) => {
+  return Object.prototype.toString.call(obj).slice(8, -1);
+};

@@ -4,7 +4,6 @@ import {OutpostsService} from './outposts.service';
 import {Outpost} from '../model/outpost';
 import {take} from 'rxjs/operators';
 import {LogEntity} from '../model/logEntity';
-import {AddLog, AddMultiLogs} from '../Store/app.actions';
 import {LogState} from '../Store/main.state';
 import {NgRedux} from '@angular-redux/store';
 
@@ -96,7 +95,7 @@ export class DataPersistenceSvc {
         store.getAll().then((logList) => {
           // console.log('aaaaaa', logList);
           resolve(logList);
-          this.store.dispatch(new AddMultiLogs(logList));
+          // this.store.dispatch(new AddMultiLogs(logList));
         });
 
       });

@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
 import {Outpost} from '../model/outpost';
 import {LogState} from '../Store/main.state';
-import {AddLog, AppActionTypes} from '../Store/app.actions';
+import {addOutpostAction} from '../Store/actions/outpost.actions';
 import {HttpClient} from '@angular/common/http';
 import {Subject} from 'rxjs';
 import {NgRedux} from '@angular-redux/store';
+import {Add_LOG} from '../Store/actions/log.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +21,21 @@ export class OutpostsService {
   }
 
   addOutpost(outpost: Outpost) {
-    this.outpostList.push(outpost);
+    this.store.dispatch(addOutpostAction(outpost));
 
+    // this.addLogAction(outpost);
+  }
+
+  getOutpostsList(): Outpost[] {
+    return this.outpostList;
+  }
+
+  setOutpostsList(aOutpostsList: Outpost[]) {
+    this.outpostList = aOutpostsList;
+    OutpostsService.changeSubject.next(true);
+  }
+
+  private addLogAction(outpost: Outpost) {
     const newID = OutpostsService.nextLogId++;
     const logMsg = 'Added new outpost id = ' + newID + ', name = ' + outpost.name;
     const url = 'https://jsonplaceholder.typicode.com/posts/' + outpost.name;
@@ -40,7 +54,7 @@ export class OutpostsService {
       .then(title => {
         this.store.dispatch(
           {
-            type: AppActionTypes.AddLog,
+            type: Add_LOG,
             payload: {
               id: newID,
               content: logMsg,
@@ -48,15 +62,5 @@ export class OutpostsService {
             }
           });
       });
-
-  }
-
-  getOutpostsList(): Outpost[] {
-    return this.outpostList;
-  }
-
-  setOutpostsList(aOutpostsList: Outpost[]) {
-    this.outpostList = aOutpostsList;
-    OutpostsService.changeSubject.next(true);
   }
 }
