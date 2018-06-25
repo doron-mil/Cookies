@@ -14,7 +14,7 @@ export function mainReducer(state: LogState = INITIAL_STATE, action: AppAction):
 
     case Add_LOG:
       // console.log('11111111111111', logState);
-      const newLogArray = [...state.logsArray, action.payload];
+      const newLogArray = state.logsArray ? [...state.logsArray, action.payload] : [action.payload];
       return {
         outpostList: state.outpostList,
         logsArray: newLogArray

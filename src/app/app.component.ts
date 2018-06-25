@@ -24,9 +24,12 @@ export class AppComponent {
     private ngRedux: NgRedux<LogState>,
     private dataPersistenceSvc: DataPersistenceSvc) {
 
-    this.logText = ngRedux.select<LogState>(  ).pipe(
+    this.logText = ngRedux.select<LogState>().pipe(
       map((logState: LogState) => {
-        const result = logState.logsArray.reduce( (res, log) => res = log.content + ' +++ ' + log.calculated + '\n' + res, '');
+        let result = '' ;
+        if (logState.logsArray) {
+          result = logState.logsArray.reduce((res, log) => res = log.content + ' +++ ' + log.calculated + '\n' + res, '');
+        }
         // console.log('aaaaaaaaaaaaa', type(logEntitiesArray),logEntitiesArray);
         return result;
       }));
