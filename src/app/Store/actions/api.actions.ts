@@ -7,20 +7,20 @@ export const API_ERROR = 'API_ERROR';
 export const apiRequest = (body: string, method: string, url: string, feature: string, data: any) => ({
   type: `${feature} ${API_REQUEST}`,
   payload: body,
-  data: {data},
+  data ,
   meta: {method, url, feature},
 });
 
 export const apiSuccess = (response: Response, feature: string, data: any) => ({
   type: `${feature} ${API_SUCCESS}`,
   payload: response,
-  data: {data},
+  data,
   meta: {feature},
 });
 
 export const apiError = (error, feature: string, data: any) => ({
   type: `${feature} ${API_ERROR}`,
   payload: error,
-  data: {data},
+  data,
   meta: {feature},
 });

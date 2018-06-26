@@ -14,9 +14,9 @@ import {environment} from '../environments/environment';
 import {HttpClientModule} from '@angular/common/http';
 import {MatButtonModule, MatCheckboxModule} from '@angular/material';
 import {DevToolsExtension, NgRedux, NgReduxModule} from '@angular-redux/store';
-import {mainReducer} from './Store/main.reducer';
+import {mainReducer} from './Store/reducers/main.reducer';
 import {createLogger} from 'redux-logger' ;
-import {applyMiddleware, createStore, Store} from 'redux';
+import {applyMiddleware, combineReducers, createStore, Store} from 'redux';
 import {persistStore, persistReducer} from 'redux-persist' ;
 import storage from 'redux-persist/lib/storage';
 import hardSet from 'redux-persist/es/stateReconciler/hardSet';
@@ -25,6 +25,7 @@ import * as localForage from 'localforage';
 import {composeWithDevTools} from 'redux-devtools-extension';
 import {outpostMiddleware} from './Store/middleware/feature/outpostLogger';
 import {apiMiddleware} from './Store/middleware/core/api';
+import {logReducer} from './Store/reducers/log.reducer';
 
 // localForage.setItem('key1', 'value1', function (err) {
 //   // if err is non-null, we got an error
@@ -65,12 +66,18 @@ export class AppModule {
       collapsed: true,
     });
 
-    const persistConfig = {
-      key: 'root',
+    const persistAppConfig = {
+      key: 'outpost',
       storage: localForage,
       stateReconciler: hardSet,
     };
-    const persistedReducer = persistReducer(persistConfig, mainReducer);
+    const persistedAppReducer = persistReducer(persistAppConfig, mainReducer);
+
+    const persistLogConfig = {
+      key: 'outpost-logs',
+      storage: localForage,
+    };
+    const persistedLogReducer = persistReducer(persistLogConfig, logReducer);
 
     const featureMiddleware = [
       outpostMiddleware
@@ -81,8 +88,13 @@ export class AppModule {
       logger
     ];
 
+    const rootReducer = combineReducers({
+      outposts: persistedAppReducer,
+      logs: persistedLogReducer,
+    });
+
     const store: Store<LogState> = createStore(
-      persistedReducer,
+      rootReducer,
       composeWithDevTools(
         applyMiddleware(...featureMiddleware, ...coreMiddleware),
       )

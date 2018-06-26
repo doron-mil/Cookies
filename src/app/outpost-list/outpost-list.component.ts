@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Outpost} from '../model/outpost';
-import {LogState} from '../Store/main.state';
+import {AppState, LogState} from '../Store/main.state';
 import {NgRedux} from '@angular-redux/store';
-import {Observable} from 'rxjs';
+import {Observable, pipe} from 'rxjs';
 import {map} from 'rxjs/operators';
 
 @Component({
@@ -15,11 +15,12 @@ export class OutpostListComponent implements OnInit {
   outpostList: Observable<Outpost[]>;
 
   constructor(private ngRedux: NgRedux<LogState>) {
-    this.outpostList = ngRedux.select<Outpost[]>('outpostList');
-    // .subscribe( (aaaa) => console.log('2222222222222222', aaaa) );
 
-    // ngRedux.select<Outpost[]>('outpostList')
-    //   .subscribe((aaaa) => console.log('2222222222222222', type(aaaa), aaaa));
+    this.outpostList = ngRedux.select('outposts').pipe(
+      map((logState: AppState) => {
+        // console.log('bbbbbbbbbbbb222', logState);
+        return logState.outpostList;
+      }));
   }
 
   ngOnInit() {

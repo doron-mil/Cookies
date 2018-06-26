@@ -1,6 +1,7 @@
 import {ADD_OUTPOST, OUTPOST_FEATURE} from '../../actions/outpost.actions';
 import {API_ERROR, API_SUCCESS, apiRequest} from '../../actions/api.actions';
 import {addLogAction} from '../../actions/log.actions';
+import {Outpost} from '../../../model/outpost';
 
 const API_TEST_URL = 'https://jsonplaceholder.typicode.com/posts/';
 
@@ -31,7 +32,7 @@ export const outpostMiddleware = ({dispatch}) => (next) => (action) => {
 
     case `${OUTPOST_FEATURE} ${API_SUCCESS}`:
 
-      // console.log( '22222222222' , action );
+      // console.log('3333333333', action);
       const payload = getPayloadForAction(action.data.name, action.payload.title);
 
       next(addLogAction(payload));

@@ -10,10 +10,11 @@ export const apiMiddleware = ({dispatch}) => (next) => (action) => {
     fetch(url, {body, method})
       .then(response => response.json())
       .then(response => {
-        // console.log('aaaaaaaaaaaa', response);
-        dispatch(apiSuccess(response, feature, data));
+        const apiSuccess1 = apiSuccess(response, feature, action.data);
+        // console.log('aaaaaaaaaaaa', apiSuccess1);
+        dispatch(apiSuccess1);
       })
-      .catch(error => dispatch(apiError(error, feature, data)));
+      .catch(error => dispatch(apiError(error, feature, action.data)));
   }
 };
 

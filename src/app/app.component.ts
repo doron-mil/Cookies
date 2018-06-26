@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {INITIAL_STATE, LogState} from './Store/main.state';
-import {mainReducer} from './Store/main.reducer';
+import {mainReducer} from './Store/reducers/main.reducer';
 import {filter, map, reduce, tap} from 'rxjs/operators';
 import {forEach} from '@angular/router/src/utils/collection';
 import {Observable} from 'rxjs';
@@ -24,13 +24,13 @@ export class AppComponent {
     private ngRedux: NgRedux<LogState>,
     private dataPersistenceSvc: DataPersistenceSvc) {
 
-    this.logText = ngRedux.select<LogState>().pipe(
+    this.logText = ngRedux.select<LogState>( 'logs').pipe(
       map((logState: LogState) => {
-        let result = '' ;
+        let result = '';
         if (logState.logsArray) {
           result = logState.logsArray.reduce((res, log) => res = log.content + ' +++ ' + log.calculated + '\n' + res, '');
         }
-        // console.log('aaaaaaaaaaaaa', type(logEntitiesArray),logEntitiesArray);
+        // console.log('aaaaaaaaaaaaa', logState , result);
         return result;
       }));
   }
