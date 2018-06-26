@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Outpost} from '../model/outpost';
 import {LogState} from '../Store/main.state';
-import {addOutpostAction} from '../Store/actions/outpost.actions';
+import {addLotsOfOutpostsAction, addOutpostAction} from '../Store/actions/outpost.actions';
 import {HttpClient} from '@angular/common/http';
 import {Subject} from 'rxjs';
 import {NgRedux} from '@angular-redux/store';
@@ -22,8 +22,6 @@ export class OutpostsService {
 
   addOutpost(outpost: Outpost) {
     this.store.dispatch(addOutpostAction(outpost));
-
-    // this.addLogAction(outpost);
   }
 
   getOutpostsList(): Outpost[] {
@@ -35,32 +33,7 @@ export class OutpostsService {
     OutpostsService.changeSubject.next(true);
   }
 
-  private addLogAction(outpost: Outpost) {
-    const newID = OutpostsService.nextLogId++;
-    const logMsg = 'Added new outpost id = ' + newID + ', name = ' + outpost.name;
-    const url = 'https://jsonplaceholder.typicode.com/posts/' + outpost.name;
-
-    fetch(url)
-      .then(response => response.json())
-      .then(json => {
-        // console.log('fetch => json :', json);
-        let titleText = json.title;
-        if (titleText) {
-          titleText = titleText.slice(0, 30);
-        }
-        return titleText;
-      })
-      .catch(err => 'NO CONNECTION')
-      .then(title => {
-        this.store.dispatch(
-          {
-            type: Add_LOG,
-            payload: {
-              id: newID,
-              content: logMsg,
-              calculated: title,
-            }
-          });
-      });
+  loadBigData() {
+    this.store.dispatch(addLotsOfOutpostsAction());
   }
 }

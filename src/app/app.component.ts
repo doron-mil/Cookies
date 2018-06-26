@@ -8,6 +8,7 @@ import idb from 'idb';
 import {DataPersistenceSvc} from './services/data.persistence.svc';
 import {NgRedux} from '@angular-redux/store';
 import {LogEntity} from './model/logEntity';
+import {OutpostsService} from './services/outposts.service';
 
 
 @Component({
@@ -22,7 +23,8 @@ export class AppComponent {
 
   constructor(
     private ngRedux: NgRedux<LogState>,
-    private dataPersistenceSvc: DataPersistenceSvc) {
+    private dataPersistenceSvc: DataPersistenceSvc,
+    private outpostsService: OutpostsService) {
 
     this.logText = ngRedux.select<LogState>( 'logs').pipe(
       map((logState: LogState) => {
@@ -34,6 +36,11 @@ export class AppComponent {
         return result;
       }));
   }
+
+  loadBigData() {
+    this.outpostsService.loadBigData();
+  }
+
 
   data2Db() {
     this.dataPersistenceSvc.data2Db();
