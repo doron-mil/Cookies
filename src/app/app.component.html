@@ -2,6 +2,10 @@
   <button type="button" class="btn btn-primary" routerLink="/outpost-list">Outpost List</button>
   <button type="button" class="btn btn-info mr-auto ml-4 mt-lg-0" routerLink="/outpost-add">Add Outpost</button>
 
+  <button type="button" class="btn mr-auto ml-4 mt-lg-0"
+          [ngClass]="{ 'btn-danger': networkOn , 'btn-light': !networkOn  }" (click)="toggleNetwork()">
+    Network {{ networkOn? 'ON' : 'OFF'}}</button>
+
   <div class="btn-group ml-4 mr-auto" dropdown>
     <button id="button-basic" dropdownToggle type="button" class="btn btn-warning dropdown-toggle ml-4 mr-auto"
             aria-controls="dropdown-basic" >

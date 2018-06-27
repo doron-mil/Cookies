@@ -36,7 +36,7 @@ export function logReducer(state: LogState = INITIAL_STATE, action): LogState {
     case ADD_LOG_OFFLINE_COMMIT_ACTION:
       const foundLog = _.find( state.logsArray , (logElement) => logElement.id === action.meta.logEntity.id);
       foundLog.calculated = action.payload.title.slice(0, 30);
-      console.log('2222222222222', action , foundLog);
+      // console.log('2222222222222', action , foundLog);
       return {
         logsArray: [...state.logsArray]
       };

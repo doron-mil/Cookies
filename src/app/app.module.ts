@@ -22,8 +22,9 @@ import {composeWithDevTools} from 'redux-devtools-extension';
 import {outpostMiddleware} from './Store/middleware/feature/outpostLogger';
 import {apiMiddleware} from './Store/middleware/core/api';
 import {logReducer} from './Store/reducers/log.reducer';
-import { offline } from '@redux-offline/redux-offline';
+import {offline} from '@redux-offline/redux-offline';
 import defaultConfig from '@redux-offline/redux-offline/lib/defaults';
+import {NetworkResolver} from './services/networkResolver.service';
 
 // localForage.setItem('key1', 'value1', function (err) {
 //   // if err is non-null, we got an error
@@ -58,7 +59,8 @@ import defaultConfig from '@redux-offline/redux-offline/lib/defaults';
 export class AppModule {
   constructor(
     ngRedux: NgRedux<LogState>,
-    private devTools: DevToolsExtension) {
+    private devTools: DevToolsExtension,
+    networkResolver: NetworkResolver) {
 
     const logger = createLogger({
       collapsed: true,
@@ -102,10 +104,11 @@ export class AppModule {
 
     const customConfig = {
       ...defaultConfig,
-      persistOptions: { storage: localForage }
-    }
+      persistOptions: {storage: localForage},
+      detectNetwork: networkResolver.detectNetwork
+    };
 
-    const store: Store  = createStore(
+    const store: Store = createStore(
       rootReducer,
       composeWithDevTools(
         applyMiddleware(...featureMiddleware, ...coreMiddleware),

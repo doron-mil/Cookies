@@ -9,6 +9,7 @@ import {DataPersistenceSvc} from './services/data.persistence.svc';
 import {NgRedux} from '@angular-redux/store';
 import {LogEntity} from './model/logEntity';
 import {OutpostsService} from './services/outposts.service';
+import {NetworkResolver} from './services/networkResolver.service';
 
 
 @Component({
@@ -19,14 +20,18 @@ import {OutpostsService} from './services/outposts.service';
 export class AppComponent {
   title = 'app';
   logText: Observable<string>;
+  networkOn: boolean;
 
 
   constructor(
     private ngRedux: NgRedux<LogState>,
     private dataPersistenceSvc: DataPersistenceSvc,
-    private outpostsService: OutpostsService) {
+    private outpostsService: OutpostsService,
+    private networkResolver: NetworkResolver) {
 
-    this.logText = ngRedux.select<LogState>( 'logs').pipe(
+    this.networkOn = networkResolver.networkOn ;
+
+    this.logText = ngRedux.select<LogState>('logs').pipe(
       map((logState: LogState) => {
         let result = '';
         if (logState.logsArray) {
@@ -35,6 +40,10 @@ export class AppComponent {
         // console.log('aaaaaaaaaaaaa', logState , result);
         return result;
       }));
+  }
+
+  toggleNetwork() {
+    this.networkOn = this.networkResolver.toggleNetwork()
   }
 
   loadBigData() {
