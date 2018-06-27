@@ -16,16 +16,14 @@ import {MatButtonModule, MatCheckboxModule} from '@angular/material';
 import {DevToolsExtension, NgRedux, NgReduxModule} from '@angular-redux/store';
 import {mainReducer} from './Store/reducers/main.reducer';
 import {createLogger} from 'redux-logger' ;
-import {applyMiddleware, combineReducers, createStore, Store} from 'redux';
-import {persistStore, persistReducer} from 'redux-persist' ;
-import storage from 'redux-persist/lib/storage';
-import hardSet from 'redux-persist/es/stateReconciler/hardSet';
-import {LocalForageStorage} from 'redux-persist/es/types';
+import {applyMiddleware, combineReducers, createStore, Middleware, Store} from 'redux';
 import * as localForage from 'localforage';
 import {composeWithDevTools} from 'redux-devtools-extension';
 import {outpostMiddleware} from './Store/middleware/feature/outpostLogger';
 import {apiMiddleware} from './Store/middleware/core/api';
 import {logReducer} from './Store/reducers/log.reducer';
+import { offline } from '@redux-offline/redux-offline';
+import defaultConfig from '@redux-offline/redux-offline/lib/defaults';
 
 // localForage.setItem('key1', 'value1', function (err) {
 //   // if err is non-null, we got an error
@@ -66,19 +64,8 @@ export class AppModule {
       collapsed: true,
     });
 
-    const persistAppConfig = {
-      key: 'outpost',
-      storage: localForage,
-      stateReconciler: hardSet,
-    };
-    const persistedAppReducer = persistReducer(persistAppConfig, mainReducer);
-
-    const persistLogConfig = {
-      key: 'outpost-logs',
-      storage: localForage,
-    };
-    const persistedLogReducer = persistReducer(persistLogConfig, logReducer);
-
+    // ************* Middleware **********************
+    // ***********************************************
     const featureMiddleware = [
       outpostMiddleware
     ];
@@ -88,20 +75,46 @@ export class AppModule {
       logger
     ];
 
+
+    // const persistAppConfig = {
+    //   key: 'outpost',
+    //   storage: localForage,
+    //   stateReconciler: hardSet,
+    // };
+    // const persistedAppReducer = persistReducer(persistAppConfig, mainReducer);
+    //
+    // const persistLogConfig = {
+    //   key: 'outpost-logs',
+    //   storage: localForage,
+    // };
+    // const persistedLogReducer = persistReducer(persistLogConfig, logReducer);
+
+    // const rootReducer = combineReducers({
+    //   outposts: persistedAppReducer,
+    //   logs: persistedLogReducer,
+    // });
+
     const rootReducer = combineReducers({
-      outposts: persistedAppReducer,
-      logs: persistedLogReducer,
+      outposts: mainReducer,
+      logs: logReducer,
     });
 
-    const store: Store<LogState> = createStore(
+
+    const customConfig = {
+      ...defaultConfig,
+      persistOptions: { storage: localForage }
+    }
+
+    const store: Store  = createStore(
       rootReducer,
       composeWithDevTools(
         applyMiddleware(...featureMiddleware, ...coreMiddleware),
+        offline(customConfig)
       )
     );
 
     ngRedux.provideStore(store);
-    persistStore(store);
+    // persistStore(store);
   }
 }
 

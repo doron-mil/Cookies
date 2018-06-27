@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import {
   ADD_LOTS_OF_OUTPOSTS,
   ADD_OUTPOST,
@@ -6,8 +7,9 @@ import {
   OUTPOST_MASS_FEATURE
 } from '../../actions/outpost.actions';
 import {API_ERROR, API_SUCCESS, apiRequest} from '../../actions/api.actions';
-import {addLogAction} from '../../actions/log.actions';
+import {addLogAction, addLogActionOffline} from '../../actions/log.actions';
 import {Outpost} from '../../../model/outpost';
+import {LogEntity} from '../../../model/logEntity';
 
 const API_TEST_URL = 'https://jsonplaceholder.typicode.com/posts/';
 const API_TEST_PHOTOS_URL = 'https://jsonplaceholder.typicode.com/photos/';
@@ -22,9 +24,10 @@ interface PhotoInterface {
 
 let nextLogId: number = 1;
 
-const getPayloadForAction = (name: string, title: string) => {
+const getPayloadForAction = (name: string, title: string, logsArray: Array<LogEntity>) => {
   title = title.slice(0, 30);
-  const newID = nextLogId++;
+  const lastLogEntity: LogEntity = _(logsArray).chain().sortBy(['id']).last().value();
+  const newID = lastLogEntity.id + 1;
   const logMsg = 'Added new outpost id = ' + newID + ', name = ' + name;
   const new_payload = {
     id: newID,
@@ -40,32 +43,34 @@ export const outpostMiddleware = ({getState, dispatch}) => (next) => (action) =>
 
   switch (action.type) {
 
-    case ADD_OUTPOST:
-      const outpost = action.payload;
+    case ADD_OUTPOST: {
+      const outpost: Outpost = action.payload;
       outpost.id = getState().outposts.outpostList.length;
       const url = API_TEST_URL + ((outpost.id % 100) + 1);
       next(apiRequest(null, 'GET', url, OUTPOST_FEATURE, outpost));
       break;
-
+    }
     case `${OUTPOST_FEATURE} ${API_SUCCESS}`:
 
       // console.log('3333333333', action);
-      const payload = getPayloadForAction(action.data.name, action.payload.title);
+      const payload = getPayloadForAction(action.data.name, action.payload.title, getState().logs.logsArray);
 
       next(addLogAction(payload));
 
       break;
 
-    case `${OUTPOST_FEATURE} ${API_ERROR}`:
+    case `${OUTPOST_FEATURE} ${API_ERROR}`: {
       console.log('Failed the API');
 
-      const err_payload = getPayloadForAction(action.data.name, 'NO CONNECTION');
+      const outpost: Outpost = action.data;
 
-      next(addLogAction(err_payload));
+      const err_payload = getPayloadForAction(action.data.name, 'NO CONNECTION', getState().logs.logsArray);
+      const url = API_TEST_URL + ((outpost.id % 100) + 1);
+
+      next(addLogActionOffline(err_payload, url));
 
       break;
-
-
+    }
     case ADD_LOTS_OF_OUTPOSTS:
       next(apiRequest(null, 'GET', API_TEST_PHOTOS_URL, OUTPOST_MASS_FEATURE, null));
       break;
