@@ -90,7 +90,9 @@
     "radix": true,
     "semicolon": [
       true,
-      "always"
+      "always",
+      "ignore-interfaces",
+      "ignore-bound-class-methods"
     ],
     "triple-equals": [
       true,

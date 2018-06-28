@@ -2,13 +2,14 @@ import * as _ from 'lodash';
 import {INITIAL_STATE, LogState} from '../main.state';
 import {
   Add_LOG,
-  ADD_LOG_OFFLINE_ACTION,
+  ADD_LOG_OFFLINE_ACTION, ADD_LOG_OFFLINE_BULK_ACTION,
   ADD_LOG_OFFLINE_COMMIT_ACTION,
   ADD_LOG_OFFLINE_ROLLBACK_ACTION,
   ADD_LOG_SUCCESS,
   ADD_MULTI_LOGS
 } from '../actions/log.actions';
 import {AppAction} from '../actions/action';
+import {LogEntity} from '../../model/logEntity';
 
 
 export function logReducer(state: LogState = INITIAL_STATE, action): LogState {
@@ -34,7 +35,7 @@ export function logReducer(state: LogState = INITIAL_STATE, action): LogState {
       return state;
 
     case ADD_LOG_OFFLINE_COMMIT_ACTION:
-      const foundLog = _.find( state.logsArray , (logElement) => logElement.id === action.meta.logEntity.id);
+      const foundLog = _.find(state.logsArray, (logElement) => logElement.id === action.meta.logEntity.id);
       foundLog.calculated = action.payload.title.slice(0, 30);
       // console.log('2222222222222', action , foundLog);
       return {
@@ -43,6 +44,19 @@ export function logReducer(state: LogState = INITIAL_STATE, action): LogState {
 
     case ADD_LOG_OFFLINE_ROLLBACK_ACTION:
       _.remove(state.logsArray, (logElement) => logElement.id === action.meta.logEntity.id);
+      return {
+        logsArray: [...state.logsArray]
+      };
+    case ADD_LOG_OFFLINE_BULK_ACTION:
+      const logEntitiesArray = action.payload as LogEntity[];
+      logEntitiesArray.forEach((logEntity) => {
+        const foundLog = _.find(state.logsArray, (logElement) => logElement.id === logEntity.id);
+        if (foundLog) {
+          foundLog.calculated = logEntity.calculated;
+        } else {
+          console.error('Failed to find a log entity with id = ' + logEntity.id);
+        }
+      });
       return {
         logsArray: [...state.logsArray]
       };

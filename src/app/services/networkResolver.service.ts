@@ -15,7 +15,7 @@ export class NetworkResolver {
   offlineCallback: (isOnline: boolean) => {};
   private _networkOn: boolean = false;
 
-  constructor() {
+  constructor( ) {
   }
 
   get networkOn(): boolean {

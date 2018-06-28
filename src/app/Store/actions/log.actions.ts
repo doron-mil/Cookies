@@ -12,6 +12,7 @@ export const ADD_MULTI_LOGS = `${LOG_FEATURE} ADD MULTI LOGS`;
 export const ADD_LOG_OFFLINE_ACTION = `${LOG_OFFLINE_FEATURE} ADD_OFFLINE`;
 export const ADD_LOG_OFFLINE_COMMIT_ACTION = `${LOG_OFFLINE_FEATURE} ADD_OFFLINE_COMMIT`;
 export const ADD_LOG_OFFLINE_ROLLBACK_ACTION = `${LOG_OFFLINE_FEATURE} ADD_OFFLINE_ROLLBACK`;
+export const ADD_LOG_OFFLINE_BULK_ACTION = `${LOG_OFFLINE_FEATURE} ADD_OFFLINE_BULK`;
 
 // define action constructors
 
@@ -30,6 +31,13 @@ export const addLogActionOffline = (logEntity: LogEntity, url: string) => ({
     }
   },
 });
+
+export const addBulkLogActionOffline = (logEntities: LogEntity[]) => ({
+  type: ADD_LOG_OFFLINE_BULK_ACTION,
+  meta: {feature: LOG_OFFLINE_FEATURE},
+  payload: logEntities,
+});
+
 
 export const addLogAction = (logEntity: LogEntity) => ({
   type: Add_LOG,
@@ -51,6 +59,7 @@ export const addLogSuccess = () => ({
   type: ADD_LOG_SUCCESS,
   meta: {feature: LOG_FEATURE},
 });
+
 
 
 

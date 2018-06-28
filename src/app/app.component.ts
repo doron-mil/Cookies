@@ -10,6 +10,7 @@ import {NgRedux} from '@angular-redux/store';
 import {LogEntity} from './model/logEntity';
 import {OutpostsService} from './services/outposts.service';
 import {NetworkResolver} from './services/networkResolver.service';
+import {EffectManager} from './services/effectManager.service';
 
 
 @Component({
@@ -27,9 +28,10 @@ export class AppComponent {
     private ngRedux: NgRedux<LogState>,
     private dataPersistenceSvc: DataPersistenceSvc,
     private outpostsService: OutpostsService,
-    private networkResolver: NetworkResolver) {
+    private networkResolver: NetworkResolver,
+    private effectManager: EffectManager) {
 
-    this.networkOn = networkResolver.networkOn ;
+    this.networkOn = networkResolver.networkOn;
 
     this.logText = ngRedux.select<LogState>('logs').pipe(
       map((logState: LogState) => {
@@ -42,8 +44,20 @@ export class AppComponent {
       }));
   }
 
+  clearAllEffects() {
+    this.effectManager.clearAllCachedEffects();
+  }
+
+  displayAllEffects() {
+    this.effectManager.displayAllEffects();
+  }
+
+  resolveAllEffects() {
+    this.effectManager.resolveAllEffects();
+  }
+
   toggleNetwork() {
-    this.networkOn = this.networkResolver.toggleNetwork()
+    this.networkOn = this.networkResolver.toggleNetwork();
   }
 
   loadBigData() {

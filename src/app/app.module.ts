@@ -25,6 +25,7 @@ import {logReducer} from './Store/reducers/log.reducer';
 import {offline} from '@redux-offline/redux-offline';
 import defaultConfig from '@redux-offline/redux-offline/lib/defaults';
 import {NetworkResolver} from './services/networkResolver.service';
+import {EffectManager} from './services/effectManager.service';
 
 // localForage.setItem('key1', 'value1', function (err) {
 //   // if err is non-null, we got an error
@@ -60,7 +61,8 @@ export class AppModule {
   constructor(
     ngRedux: NgRedux<LogState>,
     private devTools: DevToolsExtension,
-    networkResolver: NetworkResolver) {
+    networkResolver: NetworkResolver,
+    effectManager: EffectManager) {
 
     const logger = createLogger({
       collapsed: true,
@@ -105,7 +107,8 @@ export class AppModule {
     const customConfig = {
       ...defaultConfig,
       persistOptions: {storage: localForage},
-      detectNetwork: networkResolver.detectNetwork
+      detectNetwork: networkResolver.detectNetwork,
+      effect: effectManager.effectReconciler
     };
 
     const store: Store = createStore(
