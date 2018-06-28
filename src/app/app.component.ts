@@ -22,6 +22,7 @@ export class AppComponent {
   title = 'app';
   logText: Observable<string>;
   networkOn: boolean;
+  offlineFull: boolean = false;
 
 
   constructor(
@@ -42,6 +43,29 @@ export class AppComponent {
         // console.log('aaaaaaaaaaaaa', logState , result);
         return result;
       }));
+    setInterval(() => this.checkOffline(), 1000);
+  }
+
+  checkOffline() {
+    const dbPromise = idb.open('localforage', 2);
+
+    dbPromise.then((db) => {
+
+      const storeName = 'keyvaluepairs';
+      // const storeName = 'reduxPersist:offline';
+      const tx = db.transaction(storeName, 'readonly');
+      const store = tx.objectStore(storeName);
+
+      const offlineDataPromise = store.get('reduxPersist:offline') as Promise<any>;
+
+      offlineDataPromise.then((res) => {
+        const offlineData = JSON.parse(res);
+        this.offlineFull = offlineData.outbox.length > 0;
+
+        // console.log('ccccccccccccc', res, type(res), offlineData, offlineData.busy);
+      });
+
+    });
   }
 
   clearAllEffects() {

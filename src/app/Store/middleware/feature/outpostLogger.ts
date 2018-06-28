@@ -55,7 +55,9 @@ export const outpostMiddleware = ({getState, dispatch}) => (next) => (action) =>
       // console.log('3333333333', action);
       const payload = getPayloadForAction(action.data.name, action.payload.title, getState().logs.logsArray);
 
-      next(addLogAction(payload));
+      // next(addLogAction(payload));
+      // ********************** In case we want to always use the offline
+      next(addLogActionOffline(payload, null));
 
       break;
 

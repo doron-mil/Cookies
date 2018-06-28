@@ -6,6 +6,11 @@
           [ngClass]="{ 'btn-danger': networkOn , 'btn-light': !networkOn  }" (click)="toggleNetwork()">
     Network {{ networkOn? 'ON' : 'OFF'}}</button>
 
+  <button type="button" class="btn mr-auto ml-4 mt-lg-0"
+          [ngClass]="{ 'btn-primary': offlineFull , 'btn-light': !offlineFull  }" >
+    {{ offlineFull? 'OFFLINE LOADED' : 'OFFLINE EMPTY'}}</button>
+
+
   <div class="btn-group ml-4 mr-auto" dropdown>
     <button id="button-basic" dropdownToggle type="button" class="btn btn-warning dropdown-toggle ml-4 mr-auto"
             aria-controls="dropdown-basic" >
@@ -16,6 +21,7 @@
       <li role="menuitem"><a class="dropdown-item" (click)="displayAllEffects()">Display  All Effects</a></li>
       <li role="menuitem"><a class="dropdown-item" (click)="clearAllEffects()">Clear  All Effects</a></li>
       <li role="menuitem"><a class="dropdown-item" (click)="resolveAllEffects()">Resolve  All Effects</a></li>
+      <li role="menuitem"><a class="dropdown-item" (click)="checkOffline()">Offline check</a></li>
       <li class="divider dropdown-divider"></li>
       <li role="menuitem"><a class="dropdown-item" (click)="loadBigData()">Load data</a></li>
       <li class="divider dropdown-divider"></li>

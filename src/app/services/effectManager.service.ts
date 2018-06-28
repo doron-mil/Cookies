@@ -29,7 +29,7 @@ export class EffectManager {
   }
 
   effectReconciler = (effect: any, action: OfflineAction): Promise<any> => {
-    console.log('bbbbbbbbbbbb');
+    // console.log('bbbbbbbbbbbb');
     this.resolveArray.push({
       effect,
       action,
@@ -41,11 +41,11 @@ export class EffectManager {
   };
 
   displayAllEffects() {
-    console.log('aaaaaaaaaaaa - start', this.resolveArray.length);
+    console.log('****** displayAllEffects - start', this.resolveArray.length);
     this.resolveArray.forEach((effectEntity) => {
-      console.log('aaaaaaaaaaaa', effectEntity);
+      console.log('displayAllEffects : ', effectEntity);
     });
-    console.log('aaaaaaaaaaaa - end');
+    console.log('****** displayAllEffects - end');
   }
 
   resolveAllEffects() {
