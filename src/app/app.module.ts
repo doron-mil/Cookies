@@ -23,9 +23,11 @@ import {outpostMiddleware} from './Store/middleware/feature/outpostLogger';
 import {apiMiddleware} from './Store/middleware/core/api';
 import {logReducer} from './Store/reducers/log.reducer';
 import {offline} from '@redux-offline/redux-offline';
+import defaultQueue from '@redux-offline/redux-offline/lib/defaults/queue';
 import defaultConfig from '@redux-offline/redux-offline/lib/defaults';
 import {NetworkResolver} from './services/networkResolver.service';
 import {EffectManager} from './services/effectManager.service';
+import {QueueManager} from './services/queueManager.service';
 
 // localForage.setItem('key1', 'value1', function (err) {
 //   // if err is non-null, we got an error
@@ -62,7 +64,8 @@ export class AppModule {
     ngRedux: NgRedux<LogState>,
     private devTools: DevToolsExtension,
     networkResolver: NetworkResolver,
-    effectManager: EffectManager) {
+    effectManager: EffectManager,
+    queueManager: QueueManager) {
 
     const logger = createLogger({
       collapsed: true,
@@ -108,7 +111,14 @@ export class AppModule {
       ...defaultConfig,
       persistOptions: {storage: localForage},
       detectNetwork: networkResolver.detectNetwork,
-      effect: effectManager.effectReconciler
+      effect: effectManager.effectReconciler,
+      retry: effectManager.retry,
+      discard : effectManager.discard,
+      queue: {
+        ...defaultQueue,
+        enqueue: queueManager.enqueue
+      }
+
     };
 
     const store: Store = createStore(

@@ -10,6 +10,7 @@ import {Add_LOG, addBulkLogActionOffline} from '../Store/actions/log.actions';
 import {OfflineAction} from '@redux-offline/redux-offline/lib/types';
 import {LogEntity} from '../model/logEntity';
 import {apiError} from '../Store/actions/api.actions';
+import {reject} from 'q';
 
 interface EffectEntity {
   effect: any;
@@ -24,20 +25,31 @@ interface EffectEntity {
 export class EffectManager {
 
   resolveArray: Array<EffectEntity> = [];
-
+1
   constructor(private store: NgRedux<LogState>) {
   }
 
   effectReconciler = (effect: any, action: OfflineAction): Promise<any> => {
-    // console.log('bbbbbbbbbbbb');
-    this.resolveArray.push({
-      effect,
-      action,
-    });
-    const retPromise = new Promise((resolve, reject) => {
-      resolve(true);
-    });
-    return retPromise;
+    console.log('***************** effectReconciler', action, effect);
+    // this.resolveArray.push({
+    //   effect,
+    //   action,
+    // });
+    // const retPromise = new Promise((resolve, reject) => {
+    //   resolve(true);
+    //   // reject({ type : 'There was a bug in Sync' , syncId : 4444});
+    // });
+    return fetch(effect.url, {body: effect.body, method: effect.method}).then(response => response.json());
+  };
+
+  discard = (error: any, action: OfflineAction, retries: number): boolean => {
+    console.log('discard retries = ', retries, error, action);
+    return false;
+  };
+
+  retry = (action: OfflineAction, retries: number): number | null => {
+    console.log('retry retries = ', retries, action);
+    return 5000;
   };
 
   displayAllEffects() {
@@ -79,8 +91,8 @@ export class EffectManager {
       logEntity.calculated = postsMap[((logEntity.id + index) % 100)];
     });
     // console.log('bbbbbbbbbb', logEntitiesArray);
-    this.store.dispatch( addBulkLogActionOffline(logEntitiesArray));
-    this.resolveArray = [] ;
+    this.store.dispatch(addBulkLogActionOffline(logEntitiesArray));
+    this.resolveArray = [];
   }
 
   clearAllCachedEffects() {

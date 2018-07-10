@@ -57,7 +57,11 @@ export const outpostMiddleware = ({getState, dispatch}) => (next) => (action) =>
 
       // next(addLogAction(payload));
       // ********************** In case we want to always use the offline
-      next(addLogActionOffline(payload, null));
+
+      const outpost: Outpost = action.data;
+      const url = API_TEST_URL + ((outpost.id % 100) + 1);
+
+      next(addLogActionOffline(payload, url));
 
       break;
 

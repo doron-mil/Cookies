@@ -13,7 +13,7 @@ import {LogEntity} from '../../model/logEntity';
 
 
 export function logReducer(state: LogState = INITIAL_STATE, action): LogState {
-  // console.log('00000000');
+  console.log('logReducer action = ', action);
   switch (action.type) {
 
     case Add_LOG:
@@ -36,13 +36,14 @@ export function logReducer(state: LogState = INITIAL_STATE, action): LogState {
 
     case ADD_LOG_OFFLINE_COMMIT_ACTION:
       const foundLog = _.find(state.logsArray, (logElement) => logElement.id === action.meta.logEntity.id);
+      console.log('ADD_LOG_OFFLINE_COMMIT_ACTION ', action, foundLog);
       foundLog.calculated = action.payload.title.slice(0, 30);
-      // console.log('2222222222222', action , foundLog);
       return {
         logsArray: [...state.logsArray]
       };
 
     case ADD_LOG_OFFLINE_ROLLBACK_ACTION:
+      console.log('ADD_LOG_OFFLINE_ROLLBACK_ACTION', action);
       _.remove(state.logsArray, (logElement) => logElement.id === action.meta.logEntity.id);
       return {
         logsArray: [...state.logsArray]
