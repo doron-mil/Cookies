@@ -38,7 +38,7 @@ describe('OutpostAddComponent', () => {
       const store = {
         getState: jest.fn(() => ({outposts: INITIAL_APP_STATE, logs: INITIAL_STATE})),
         dispatch: jest.fn(),
-      };
+      }
 ​
       const invoke = (action) => apiMiddleware(store)(next)(action);
       return {store, next, invoke};
@@ -128,7 +128,7 @@ describe('OutpostAddComponent', () => {
       const store = {
         getState: jest.fn(() => ({outposts: INITIAL_APP_STATE, logs: INITIAL_STATE})),
         dispatch: jest.fn(),
-      };
+      }
 ​
       const invoke = (action) => outpostMiddleware(store)(next)(action);
       return {store, next, invoke};
