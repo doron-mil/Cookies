@@ -60,6 +60,14 @@ export const addLogSuccess = () => ({
   meta: {feature: LOG_FEATURE},
 });
 
+export const addLogDispatchTestAction  = () => {
+  return (dispatch) => {
+    dispatch({
+      type: 'FIRST'
+    });
+  };
+};
+
 
 
 

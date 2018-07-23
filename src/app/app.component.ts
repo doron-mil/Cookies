@@ -11,6 +11,7 @@ import {LogEntity} from './model/logEntity';
 import {OutpostsService} from './services/outposts.service';
 import {NetworkResolver} from './services/networkResolver.service';
 import {EffectManager} from './services/effectManager.service';
+import {addLogDispatchTestAction} from './Store/actions/log.actions';
 
 
 @Component({
@@ -86,6 +87,10 @@ export class AppComponent {
 
   loadBigData() {
     this.outpostsService.loadBigData();
+  }
+
+  runTestAction() {
+    // this.ngRedux.dispatch( addLogDispatchTestAction() );
   }
 
 

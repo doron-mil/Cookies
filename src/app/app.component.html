@@ -18,6 +18,8 @@
     </button>
     <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
         role="menu" aria-labelledby="button-basic">
+      <li role="menuitem"><a class="dropdown-item" (click)="runTestAction()">Run Test Action</a></li>
+      <li class="divider dropdown-divider"></li>
       <li role="menuitem"><a class="dropdown-item" (click)="displayAllEffects()">Display  All Effects</a></li>
       <li role="menuitem"><a class="dropdown-item" (click)="clearAllEffects()">Clear  All Effects</a></li>
       <li role="menuitem"><a class="dropdown-item" (click)="resolveAllEffects()">Resolve  All Effects</a></li>

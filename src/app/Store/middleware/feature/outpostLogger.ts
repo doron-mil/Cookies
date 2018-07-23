@@ -27,7 +27,7 @@ let nextLogId: number = 1;
 const getPayloadForAction = (name: string, title: string, logsArray: Array<LogEntity>) => {
   title = title.slice(0, 30);
   const lastLogEntity: LogEntity = _(logsArray).chain().sortBy(['id']).last().value();
-  const newID = lastLogEntity.id + 1;
+  const newID = lastLogEntity ? lastLogEntity.id + 1 : 0 ;
   const logMsg = 'Added new outpost id = ' + newID + ', name = ' + name;
   const new_payload = {
     id: newID,

@@ -11,7 +11,7 @@ export const apiRequest = (body: string, method: string, url: string, feature: s
   meta: {method, url, feature},
 });
 
-export const apiSuccess = (response: Response, feature: string, data: any) => ({
+export const apiSuccess = (response , feature: string, data: any) => ({
   type: `${feature} ${API_SUCCESS}`,
   payload: response,
   data,

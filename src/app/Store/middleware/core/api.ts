@@ -6,7 +6,7 @@ export const apiMiddleware = ({dispatch}) => (next) => (action) => {
   if (action.type.includes(API_REQUEST)) {
     const {body, url, method, feature} = action.meta;
 
-    fetch(url, {body, method})
+    return fetch(url, {body, method})
       .then(response => response.json())
       .then(response => {
         const apiSuccess1 = apiSuccess(response, feature, action.data);
