@@ -11,7 +11,7 @@ import {MainEffects} from './Store/main.effects';
 import {INITIAL_STATE, LogState} from './Store/main.state';
 import {ServiceWorkerModule} from '@angular/service-worker';
 import {environment} from '../environments/environment';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {MatButtonModule, MatCheckboxModule} from '@angular/material';
 import {DevToolsExtension, NgRedux, NgReduxModule} from '@angular-redux/store';
 import {mainReducer} from './Store/reducers/main.reducer';
@@ -28,6 +28,10 @@ import defaultConfig from '@redux-offline/redux-offline/lib/defaults';
 import {NetworkResolver} from './services/networkResolver.service';
 import {EffectManager} from './services/effectManager.service';
 import {QueueManager} from './services/queueManager.service';
+import {registerLocaleData} from '@angular/common';
+import localeHe from '@angular/common/locales/he';
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 
 // localForage.setItem('key1', 'value1', function (err) {
 //   // if err is non-null, we got an error
@@ -36,6 +40,9 @@ import {QueueManager} from './services/queueManager.service';
 //   });
 // });
 
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
 
 @NgModule({
   declarations: [
@@ -54,6 +61,14 @@ import {QueueManager} from './services/queueManager.service';
     ServiceWorkerModule.register('/ngsw-worker.js', {enabled: environment.production}),
     MatButtonModule,
     MatCheckboxModule,
+    HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
   ],
   exports: [AlertModule, BsDropdownModule, AppRoutingModule],
   providers: [],

@@ -1,0 +1,16 @@
+{
+  "NAME": "שם",
+  "main" : {
+    "outposts" : {
+      "table" : {
+        "headers" :{
+          "id" : "ID" ,
+          "name" : "שם" ,
+          "location" : "מיקום" ,
+          "supply" : "אספקה"
+        }
+      }
+
+    }
+  }
+}

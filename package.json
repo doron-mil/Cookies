@@ -27,6 +27,8 @@
     "@angular/router": "^6.0.3",
     "@angular/service-worker": "^6.0.3",
     "@ng-bootstrap/ng-bootstrap": "^2.1.0",
+    "@ngx-translate/core": "^10.0.2",
+    "@ngx-translate/http-loader": "^3.0.1",
     "@redux-offline/redux-offline": "^2.3.3",
     "bootstrap": "^4.1.1",
     "core-js": "^2.5.4",
@@ -39,6 +41,7 @@
     "redux": "^4.0.0",
     "redux-logger": "^3.0.6",
     "redux-observable": "^1.0.0-beta.2",
+    "redux-thunk": "^2.3.0",
     "rxjs": "^6.0.0",
     "zone.js": "^0.8.26"
   },

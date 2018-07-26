@@ -2,16 +2,16 @@
 
   <div class="row justify-content-md-center">
     <div class="col col-2">
-      ID
+      {{ 'main.outposts.table.headers.id' | translate }}
     </div>
     <div class="col col-4">
-      Name
+      <label >{{ 'NAME' | translate }}</label>
     </div>
     <div class="col col-4">
-      Location
+      {{ 'main.outposts.table.headers.location' | translate }}
     </div>
     <div class="col col-2">
-      Supply
+      {{ Supply }}
     </div>
   </div>
   <div class="row" *ngFor="let outpost of outpostList | async">

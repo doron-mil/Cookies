@@ -12,6 +12,7 @@ import {OutpostsService} from './services/outposts.service';
 import {NetworkResolver} from './services/networkResolver.service';
 import {EffectManager} from './services/effectManager.service';
 import {addLogDispatchTestAction} from './Store/actions/log.actions';
+import {TranslateService} from '@ngx-translate/core';
 
 
 @Component({
@@ -31,7 +32,11 @@ export class AppComponent {
     private dataPersistenceSvc: DataPersistenceSvc,
     private outpostsService: OutpostsService,
     private networkResolver: NetworkResolver,
-    private effectManager: EffectManager) {
+    private effectManager: EffectManager,
+    translate: TranslateService) {
+
+    translate.setDefaultLang('he');
+    translate.use('he');
 
     this.networkOn = networkResolver.networkOn;
 
