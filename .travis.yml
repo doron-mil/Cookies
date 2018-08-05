@@ -4,3 +4,11 @@ dist: trusty
 node_js:
 - '8.11.3'
 
+script:
+  - ng tslint
+  - ng test --watch=fale
+  - ng build --prod
+
+addons:
+  chrome: stable
+
