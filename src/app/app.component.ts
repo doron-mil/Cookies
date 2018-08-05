@@ -131,7 +131,7 @@ export class AppComponent {
 
     dbPromise.then((db) => {
 
-      chachesArray.forEach((cahchesMeta) => writeToCache(db, cahchesMeta));
+      chachesArray.forEach((cachesMeta) => writeToCache(db, cachesMeta));
     });
 
   }

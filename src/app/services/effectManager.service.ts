@@ -25,7 +25,7 @@ interface EffectEntity {
 export class EffectManager {
 
   resolveArray: Array<EffectEntity> = [];
-1
+
   constructor(private store: NgRedux<LogState>) {
   }
 

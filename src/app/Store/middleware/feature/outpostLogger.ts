@@ -22,7 +22,7 @@ interface PhotoInterface {
   thumbnailUrl: string;
 }
 
-let nextLogId: number = 1;
+const nextLogId: number = 1;
 
 const getPayloadForAction = (name: string, title: string, logsArray: Array<LogEntity>) => {
   title = title.slice(0, 30);
