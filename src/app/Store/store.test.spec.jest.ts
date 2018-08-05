@@ -218,7 +218,7 @@ describe('OutpostAddComponent', () => {
     expect(logReducer(undefined, {})).toEqual(INITIAL_STATE);
   });
 
-  it('#001 - should dispatch action', () => {
+  it('#001 - ACTION CHECK - should dispatch action', () => {
     // Initialize mockstore with empty state
     const initialState = {};
     const store = mockStore(initialState);
@@ -238,7 +238,7 @@ describe('OutpostAddComponent', () => {
     expect(actions).toEqual([expectedPayload]);
   });
 
-  it('#000 - checking action creation', () => {
+  it('#000 - ACTION CHECK - checking action creation', () => {
 
     const logEntity: LogEntity = {
       id: 1,
