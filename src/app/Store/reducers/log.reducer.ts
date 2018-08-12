@@ -13,7 +13,7 @@ import {LogEntity} from '../../model/logEntity';
 
 
 export function logReducer(state: LogState = INITIAL_STATE, action): LogState {
-  console.log('logReducer action = ', action);
+  // console.log('logReducer action = ', action);
   switch (action.type) {
 
     case Add_LOG:

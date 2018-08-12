@@ -115,7 +115,7 @@ describe('OutpostAddComponent', () => {
     it('#007 - MIDDLEWARE CHECK - checking full - adding outpost will trigger 4 actions', async () => {
       await delay(2000);
       const actions = store.getActions();
-      actions.forEach((action) => console.log('store.test.spec.jest - #006 - action ', action));
+      // actions.forEach((action) => console.log('store.test.spec.jest - #006 - action ', action));
       expect(actions.length).toEqual(4);
       expect(actions).toMatchSnapshot();
     });
