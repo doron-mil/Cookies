@@ -1,0 +1,30 @@
+(/__tests__/.*|(\\.|/)(jest))\\.(ts|tsx)?$
+
+**/__tests__/**/*.+(ts|js)?(x),**/+(*.)+(spec.jset).+(ts|js)?(x)
+
+((\\.|/)(spec))\\.(ts|tsx)?$
+(/__tests__/.*|(\\.|/)(spec))\\.(ts|tsx)?$
+
+(/__tests__/.*|(\\.|/)(test|spec))\\.ts?$
+(/.*\\)(test|spec))\\.ts?$
+/.*.spec.(js|ts|tsx)?$
+/.*.jest.(js|ts|tsx)?$
+/.*.spec.jest.(js|ts|tsx)?$
+
+ RUNS  src/app/app-routing.module.spec.ts
+ RUNS  src/app/app.component.spec.ts
+ RUNS  src/app/outposts-svc.service.spec.ts
+ RUNS  src/app/outpost-add/outpost-add.component.spec.ts
+
+
+ RUNS  src/app/app-routing.module.spec.ts
+ RUNS  src/app/app.component.spec.ts
+ RUNS  src/app/outposts-svc.service.spec.ts
+ RUNS  src/app/Store/store.test.spec.ts
+
+src/app/app-routing.module.spec.ts
+src/app/outposts-svc.service.spec.ts
+src/app/Store/store.test.spec.ts
+src/app/app.component.spec.ts
+src/app/outpost-add/outpost-add.component.spec.ts
+src/app/outpost-list/outpost-list.component.spec.ts

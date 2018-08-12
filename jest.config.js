@@ -1,6 +1,7 @@
 module.exports = {
   preset: 'jest-preset-angular',
   roots: ['src'],
+  testMatch : [ "**/__tests__/**/*.ts?(x)", "**/?(*.)+(spec|test|jest).ts?(x)" ],
   setupTestFrameworkScriptFile: '<rootDir>/src/setup-jest.ts',
   moduleNameMapper: {
     '@app/(.*)': '<rootDir>/src/app/$1',
