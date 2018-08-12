@@ -1,14 +1,18 @@
-import {EntityState, EntityAdapter, createEntityAdapter} from '@ngrx/entity';
 import {LogEntity} from '../model/logEntity';
+import {Outpost} from '../model/outpost';
 
-export const logAdapter: EntityAdapter<LogEntity> = createEntityAdapter<LogEntity>();
+export interface AppState {
+  outpostList: Array<Outpost>;
+}
 
-const logs = {
-  ids     : [],
-  entities: {}
+export interface LogState {
+  logsArray: Array<LogEntity>;
+}
+
+export const INITIAL_APP_STATE: AppState = {
+  outpostList: [],
 };
 
-export interface LogState extends EntityState<LogEntity> {}
-
-export const initLogState: LogState = logAdapter.getInitialState(logs);
-
+export const INITIAL_STATE: LogState = {
+  logsArray: [],
+};

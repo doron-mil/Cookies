@@ -1,15 +1,17 @@
 import {Component} from '@angular/core';
-import {LogState} from './Store/main.state';
-import {ActionsSubject, select, Store} from '@ngrx/store';
-import {addLogsStateSelector, addLogsStateSelector2, addLogsStateSelector3} from './Store/main.reducer';
+import {INITIAL_STATE, LogState} from './Store/main.state';
+import {mainReducer} from './Store/reducers/main.reducer';
 import {filter, map, reduce, tap} from 'rxjs/operators';
-import {Actions, ofType} from '@ngrx/effects';
-import {AddLogSuccess, AppActions, AppActionTypes} from './Store/app.actions';
-import {AppState} from './app.module';
 import {forEach} from '@angular/router/src/utils/collection';
 import {Observable} from 'rxjs';
 import idb from 'idb';
 import {DataPersistenceSvc} from './services/data.persistence.svc';
+import {NgRedux} from '@angular-redux/store';
+import {LogEntity} from './model/logEntity';
+import {OutpostsService} from './services/outposts.service';
+import {NetworkResolver} from './services/networkResolver.service';
+import {EffectManager} from './services/effectManager.service';
+import {addLogDispatchTestAction} from './Store/actions/log.actions';
 
 
 @Component({
@@ -20,69 +22,86 @@ import {DataPersistenceSvc} from './services/data.persistence.svc';
 export class AppComponent {
   title = 'app';
   logText: Observable<string>;
+  networkOn: boolean;
+  offlineFull: boolean = false;
+
 
   constructor(
-    private store: Store<AppState>,
-    private dataPersistenceSvc: DataPersistenceSvc) {
-    //  this.logText = 'start';
+    private ngRedux: NgRedux<LogState>,
+    private dataPersistenceSvc: DataPersistenceSvc,
+    private outpostsService: OutpostsService,
+    private networkResolver: NetworkResolver,
+    private effectManager: EffectManager) {
 
-    // this.store.select(mapToDataToSources).pipe(
-    //   // map(state => {
-    //   //   console.log('cccccccc', state.mainReducer.entities);
-    //   //   return state.mainReducer.entities;
-    //   // }),
-    //   map(state => {
-    //     const ent = (state.mainReducer.ids as number[]).reduce(
-    //       (res, id) => res = state.mainReducer.entities[id].content + '\n' + res, '');
-    //     // console.log('cccccccc', state.mainReducer.entities, ent);
-    //     return ent;
-    //   }),
-    // ).subscribe((aaa) => this.logText = aaa);
+    this.networkOn = networkResolver.networkOn;
 
-    // this.store.select(addLogsStateSelector3).pipe(
-    //   map(logsArray => {
-    //     const formattedLogs = logsArray.reduce(
-    //             (res, log) => res = log + '\n' + res , '');
-    //     console.log('cccccccc', formattedLogs);
-    //     return formattedLogs;
-    //   }),
-    // ).subscribe((formattedLogs) => this.logText = formattedLogs);
-
-    this.logText = this.store.select(addLogsStateSelector).pipe(
-      map(logsArray => {
-        if (!logsArray) {
-          return '';
+    this.logText = ngRedux.select<LogState>('logs').pipe(
+      map((logState: LogState) => {
+        let result = '';
+        if (logState.logsArray) {
+          result = logState.logsArray.reduce((res, log) => res = log.content + ' +++ ' + log.calculated + '\n' + res, '');
         }
-        const formattedLogs = logsArray.reduce(
-          (res, log) => res = log.content + ' +++ ' + log.title + '\n' + res, '');
-        // console.log('cccccccc', formattedLogs);
-        return formattedLogs;
-      }),
-    );
-
-    // this.store.select(AppActionTypes.AddLogSuccess).pipe( tap((aaa) => console.log('bbbbbb', aaa)))
-    //   .subscribe((aaa) => console.log('bbbbbb', aaa));
+        // console.log('aaaaaaaaaaaaa', logState , result);
+        return result;
+      }));
+    setInterval(() => this.checkOffline(), 1000);
   }
+
+  checkOffline() {
+    const dbPromise = idb.open('localforage', 2);
+
+    dbPromise.then((db) => {
+
+      const storeName = 'keyvaluepairs';
+      // const storeName = 'reduxPersist:offline';
+      const tx = db.transaction(storeName, 'readonly');
+      const store = tx.objectStore(storeName);
+
+      const offlineDataPromise = store.get('reduxPersist:offline') as Promise<any>;
+
+      offlineDataPromise.then((res) => {
+        const offlineData = JSON.parse(res);
+        this.offlineFull = offlineData.outbox.length > 0;
+
+        // console.log('ccccccccccccc', res, type(res), offlineData, offlineData.busy);
+      });
+
+    });
+  }
+
+  clearAllEffects() {
+    this.effectManager.clearAllCachedEffects();
+  }
+
+  displayAllEffects() {
+    this.effectManager.displayAllEffects();
+  }
+
+  resolveAllEffects() {
+    this.effectManager.resolveAllEffects();
+  }
+
+  toggleNetwork() {
+    this.networkOn = this.networkResolver.toggleNetwork();
+  }
+
+  loadBigData() {
+    this.outpostsService.loadBigData();
+  }
+
+  runTestAction() {
+    // this.ngRedux.dispatch( addLogDispatchTestAction() );
+  }
+
 
   data2Db() {
     this.dataPersistenceSvc.data2Db();
   }
 
   Db2data() {
-    this.dataPersistenceSvc.Db2data().then( () => console.log('eeeee'));
+    this.dataPersistenceSvc.Db2data().then(() => console.log('eeeee'));
 
   }
-
-  // Working !!!!
-  // constructor(private actionsSubj: ActionsSubject) {
-  //   this.logText = 'start';
-  //
-  //   this.logText = actionsSubj.subscribe(data => {
-  //     if(data.type === AppActionTypes.AddLog) {
-  //       console.log('bbbbbb' , data );
-  //     }
-  //   });
-  // }
 
   resetDB() {
     window.indexedDB.deleteDatabase('test-db1');
@@ -112,7 +131,7 @@ export class AppComponent {
 
     dbPromise.then((db) => {
 
-      chachesArray.forEach((cahchesMeta) => writeToCache(db, cahchesMeta));
+      chachesArray.forEach((cachesMeta) => writeToCache(db, cachesMeta));
     });
 
   }
@@ -351,10 +370,6 @@ export class AppComponent {
 
 }
 
-export function mapToDataToSources(state: AppState): AppState {
-  // console.log(state);
-  return state;
-}
 
 function writeToCache(db, cahchesMeta: { store: string; cachesName: string }) {
 

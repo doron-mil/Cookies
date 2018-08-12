@@ -1,0 +1,146 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OutpostAddComponent #004 - REDUCER CHECK - SNAPSHOT - should return state with first log  1`] = `
+Object {
+  "logsArray": Array [
+    Object {
+      "calculated": "testCalculated",
+      "content": "testContent2",
+      "id": 1,
+    },
+  ],
+}
+`;
+
+exports[`OutpostAddComponent #004.1 - REDUCER CHECK - SNAPSHOT - using bad LogEntity  1`] = `
+Object {
+  "logsArray": Array [
+    undefined,
+  ],
+}
+`;
+
+exports[`OutpostAddComponent #007 - MIDDLEWARE - full scenario #007 - MIDDLEWARE CHECK - checking full - adding outpost will trigger 4 actions 1`] = `
+Array [
+  Object {
+    "meta": Object {
+      "feature": "[OUTPOST]",
+    },
+    "payload": Object {
+      "id": 0,
+      "location": "TelAviv",
+      "logNumber": 1,
+      "name": "OutpostTestName",
+      "supplyMeter": 269,
+    },
+    "type": "[OUTPOST] ADD",
+  },
+  Object {
+    "data": Object {
+      "id": 0,
+      "location": "TelAviv",
+      "logNumber": 1,
+      "name": "OutpostTestName",
+      "supplyMeter": 269,
+    },
+    "meta": Object {
+      "feature": "[OUTPOST]",
+      "method": "GET",
+      "url": "https://jsonplaceholder.typicode.com/posts/1",
+    },
+    "payload": null,
+    "type": "[OUTPOST] API_REQUEST",
+  },
+  Object {
+    "data": Object {
+      "id": 0,
+      "location": "TelAviv",
+      "logNumber": 1,
+      "name": "OutpostTestName",
+      "supplyMeter": 269,
+    },
+    "meta": Object {
+      "feature": "[OUTPOST]",
+    },
+    "payload": Object {
+      "body": "quia et suscipit
+suscipit recusandae consequuntur expedita et cum
+reprehenderit molestiae ut ut quas totam
+nostrum rerum est autem sunt rem eveniet architecto",
+      "id": 1,
+      "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+      "userId": 1,
+    },
+    "type": "[OUTPOST] API_SUCCESS",
+  },
+  Object {
+    "meta": Object {
+      "feature": "[LOGS-OFFLINE]",
+      "offline": Object {
+        "commit": Object {
+          "meta": Object {
+            "feature": "[LOGS-OFFLINE]",
+            "logEntity": Object {
+              "calculated": "sunt aut facere repellat provi",
+              "content": "Added new outpost id = 0, name = OutpostTestName",
+              "id": 0,
+            },
+          },
+          "type": "[LOGS-OFFLINE] ADD_OFFLINE_COMMIT",
+        },
+        "effect": Object {
+          "body": null,
+          "method": "GET",
+          "url": "https://jsonplaceholder.typicode.com/posts/1",
+        },
+        "rollback": Object {
+          "meta": Object {
+            "feature": "[LOGS-OFFLINE]",
+            "logEntity": Object {
+              "calculated": "sunt aut facere repellat provi",
+              "content": "Added new outpost id = 0, name = OutpostTestName",
+              "id": 0,
+            },
+          },
+          "type": "[LOGS-OFFLINE] ADD_OFFLINE_ROLLBACK",
+        },
+      },
+    },
+    "payload": Object {
+      "calculated": "sunt aut facere repellat provi",
+      "content": "Added new outpost id = 0, name = OutpostTestName",
+      "id": 0,
+    },
+    "type": "[LOGS-OFFLINE] ADD_OFFLINE",
+  },
+]
+`;
+
+exports[`OutpostAddComponent #008 - API MIDDLEWARE - middleware itself using MOCKs #009 - API MIDDLEWARE CHECK - checking the middleware itself - apiError 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      Object {
+        "data": Object {
+          "id": 1,
+          "location": "TelAviv",
+          "logNumber": 1,
+          "name": "OutpostTestName",
+          "supplyMeter": 269,
+        },
+        "meta": Object {
+          "feature": "[OUTPOST]",
+        },
+        "payload": [FetchError: request to https://jsonplaceholder2.typicode.com/posts/a failed, reason: getaddrinfo ENOTFOUND jsonplaceholder2.typicode.com jsonplaceholder2.typicode.com:443],
+        "type": "[OUTPOST] API_ERROR",
+      },
+    ],
+  ],
+  "results": Array [
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+  ],
+}
+`;

@@ -2,6 +2,15 @@
   <button type="button" class="btn btn-primary" routerLink="/outpost-list">Outpost List</button>
   <button type="button" class="btn btn-info mr-auto ml-4 mt-lg-0" routerLink="/outpost-add">Add Outpost</button>
 
+  <button type="button" class="btn mr-auto ml-4 mt-lg-0"
+          [ngClass]="{ 'btn-danger': networkOn , 'btn-light': !networkOn  }" (click)="toggleNetwork()">
+    Network {{ networkOn? 'ON' : 'OFF'}}</button>
+
+  <button type="button" class="btn mr-auto ml-4 mt-lg-0"
+          [ngClass]="{ 'btn-primary': offlineFull , 'btn-light': !offlineFull  }" >
+    {{ offlineFull? 'OFFLINE LOADED' : 'OFFLINE EMPTY'}}</button>
+
+
   <div class="btn-group ml-4 mr-auto" dropdown>
     <button id="button-basic" dropdownToggle type="button" class="btn btn-warning dropdown-toggle ml-4 mr-auto"
             aria-controls="dropdown-basic" >
@@ -9,6 +18,15 @@
     </button>
     <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
         role="menu" aria-labelledby="button-basic">
+      <li role="menuitem"><a class="dropdown-item" (click)="runTestAction()">Run Test Action</a></li>
+      <li class="divider dropdown-divider"></li>
+      <li role="menuitem"><a class="dropdown-item" (click)="displayAllEffects()">Display  All Effects</a></li>
+      <li role="menuitem"><a class="dropdown-item" (click)="clearAllEffects()">Clear  All Effects</a></li>
+      <li role="menuitem"><a class="dropdown-item" (click)="resolveAllEffects()">Resolve  All Effects</a></li>
+      <li role="menuitem"><a class="dropdown-item" (click)="checkOffline()">Offline check</a></li>
+      <li class="divider dropdown-divider"></li>
+      <li role="menuitem"><a class="dropdown-item" (click)="loadBigData()">Load data</a></li>
+      <li class="divider dropdown-divider"></li>
       <li role="menuitem"><a class="dropdown-item" (click)="data2Db()">Save data 2 DB</a></li>
       <li role="menuitem"><a class="dropdown-item" (click)="Db2data()">Get data from DB</a></li>
       <li class="divider dropdown-divider"></li>
